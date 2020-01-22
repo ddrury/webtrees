@@ -1,0 +1,46 @@
+{
+  "title": "Google™ maps",
+  "help": "<a href='https://developers.google.com/maps/documentation/javascript/get-api-key'>Google</a>",
+  "user_parameters": {
+    "API Key": "GM_API_KEY"
+  },
+  "common": {
+    "url": "http://{s}.google.com/vt/lyrs={lyrs}&x={x}&y={y}&z={z}",
+    "parameters": {
+      "attribution": "Map data &copy2020 Google LLC <a href=\"https://www.google.com/intl/en-GB_US/help/terms_maps/\">Terms of use</a>",
+      "maxZoom": 20,
+      "subdomains": [
+        "mt0",
+        "mt1",
+        "mt2",
+        "mt3"
+      ]
+    }
+  },
+  "styles": [
+    {
+      "title": "Streets",
+      "parameters": {
+        "lyrs": "m"
+      }
+    },
+    {
+      "title": "Hybrid",
+      "parameters": {
+        "lyrs": "y"
+      }
+    },
+    {
+      "title": "Satellite",
+      "parameters": {
+        "lyrs": "s"
+      }
+    },
+    {
+      "title": "Terrain",
+      "parameters": {
+        "lyrs": "p"
+      }
+    }
+  ]
+}

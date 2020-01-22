@@ -24,7 +24,11 @@ use Illuminate\Support\Collection;
 <?= view('components/breadcrumbs', ['links' => $breadcrumbs]) ?>
 
 <h1><?= $title ?></h1>
-
+<?php if(!$can_edit) : ?>
+  <div class="alert alert-warning" role="alert">
+    <?= I18N::translate('Editing disabled - no map providers available') ?>
+  </div>
+<?php endif ?>
 <p>
     <label>
         <input id="hide-unused-locations" type="checkbox" data-toggle="collapse" data-target=".unused-location">
@@ -93,12 +97,18 @@ use Illuminate\Support\Collection;
             -->
 
             <td>
+              <?php if ($can_edit) : ?>
                 <a class="btn btn-primary" href="<?= e(route('map-data-edit', ['place_id'  => $place->pl_id, 'parent_id' => $place->pl_parent_id])) ?>" title="<?= I18N::translate('Edit') ?>">
                     <?= view('icons/edit') ?>
                     <span class="sr-only">
                         <?= I18N::translate('Edit') ?>
                     </span>
                 </a>
+              <?php else : ?>
+                    <button type="button" class="btn btn-primary" disabled>
+                        <?= view('icons/edit') ?>
+                    </button>
+              <?php endif ?>
             </td>
 
             <td>
@@ -142,11 +152,19 @@ use Illuminate\Support\Collection;
     <tfoot>
         <tr>
             <td colspan="7">
+              <?php if ($can_edit) : ?>
                 <a class="btn btn-primary" href="<?= e(route('map-data-edit', ['place_id' => '0', 'parent_id' => $parent_id])) ?>">
                     <?= view('icons/add') ?>
                     <?= /* I18N: A button label. */
                     I18N::translate('add place') ?>
                 </a>
+              <?php else : ?>
+                <button type="button" class="btn btn-primary" disabled>
+                    <?= /* I18N: A button label. */
+                    I18N::translate('add place') ?>
+                    <?= view('icons/add') ?>
+                </button>
+              <?php endif ?>
                 <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <?= view('icons/download') ?>

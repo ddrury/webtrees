@@ -1,6 +1,6 @@
 /**
  * webtrees: online genealogy
- * Copyright (C) 2019 webtrees development team
+ * Copyright (C) 2020 webtrees development team
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -118,6 +118,8 @@ import 'leaflet';
 import 'leaflet.markercluster';
 import 'beautifymarker';
 import 'leaflet-control-geocoder';
+import 'leaflet.control.layers.tree';
+import 'leaflet-bing-layer';
 
 window.$ = window.jQuery = $;
 

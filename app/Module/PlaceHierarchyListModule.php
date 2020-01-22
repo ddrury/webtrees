@@ -54,6 +54,7 @@ use function view;
 class PlaceHierarchyListModule extends AbstractModule implements ModuleListInterface, RequestHandlerInterface
 {
     use ModuleListTrait;
+    use ModuleMapProviderTrait;
 
     protected const ROUTE_URL = '/tree/{tree}/place-list';
 
@@ -189,19 +190,13 @@ class PlaceHierarchyListModule extends AbstractModule implements ModuleListInter
         }
 
         $content = '';
-        $showmap = Site::getPreference('map-provider') !== '';
+        $showmap = (bool)Site::getPreference('SHOW_MAP_PLACE_HIERARCHY_LIST') && $this->mapsAvailable();
         $data    = null;
 
         if ($showmap) {
             $content .= view('modules/place-hierarchy/map', [
                 'data'     => $this->mapData($tree, $place),
-                'provider' => [
-                    'url'    => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    'options' => [
-                        'attribution' => '<a href="https://www.openstreetmap.org/copyright">&copy; OpenStreetMap</a> contributors',
-                        'max_zoom'    => 19
-                    ]
-                ]
+                'provider' => $this->providerDetails()
             ]);
         }
 
@@ -336,7 +331,7 @@ class PlaceHierarchyListModule extends AbstractModule implements ModuleListInter
         $places    = $placeObj->getChildPlaces();
         $features  = [];
         $sidebar   = '';
-        $flag_path = Webtrees::MODULES_DIR . 'openstreetmap/';
+        $flag_path = '/public/';
         $show_link = true;
 
         if ($places === []) {
@@ -346,12 +341,8 @@ class PlaceHierarchyListModule extends AbstractModule implements ModuleListInter
 
         foreach ($places as $id => $place) {
             $location = new PlaceLocation($place->gedcomName());
-
-            if ($location->icon() !== '' && is_file($flag_path . $location->icon())) {
-                $flag = $flag_path . $location->icon();
-            } else {
-                $flag = '';
-            }
+            $icon     = $flag_path . $location->icon();
+            $flag     = is_file(Webtrees::ROOT_DIR . $icon) ? $icon : '';
 
             if ($location->latitude() === 0.0 && $location->longitude() === 0.0) {
                 $sidebar_class = 'unmapped';

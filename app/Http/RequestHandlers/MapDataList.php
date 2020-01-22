@@ -21,6 +21,7 @@ namespace Fisharebest\Webtrees\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Module\ModuleMapProviderTrait;
 use Fisharebest\Webtrees\Module\PlaceHierarchyListModule;
 use Fisharebest\Webtrees\Services\MapDataService;
 use Fisharebest\Webtrees\Services\ModuleService;
@@ -42,6 +43,7 @@ use function route;
 class MapDataList implements RequestHandlerInterface
 {
     use ViewResponseTrait;
+    use ModuleMapProviderTrait;
 
     /** @var MapDataService */
     private $map_data_service;
@@ -115,6 +117,7 @@ class MapDataList implements RequestHandlerInterface
             'placelist'    => $this->map_data_service->getPlaceListLocation($parent_id),
             'list_module'  => $list_module,
             'title'        => $title,
+            'can_edit'     => $this->mapsAvailable(),
         ]);
     }
 }

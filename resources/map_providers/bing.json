@@ -1,0 +1,42 @@
+{
+  "title": "Bing©",
+  "help": "<a href='https://www.bingmapsportal.com/'>Bing Maps Dev center</a>",
+  "user_parameters": {
+    "Map Key": "bingMapsKey"
+  },
+  "common": {
+    "parameters": []
+  },
+  "styles": [
+    {
+      "title": "Aerial",
+      "parameters": {
+        "imagerySet": "Aerial"
+      }
+    },
+    {
+      "title": "CanvasDark",
+      "parameters": {
+        "imagerySet": "CanvasDark"
+      }
+    },
+    {
+      "title": "CanvasGray",
+      "parameters": {
+        "imagerySet": "CanvasGray"
+      }
+    },
+    {
+      "title": "CanvasLight",
+      "parameters": {
+        "imagerySet": "CanvasLight"
+      }
+    },
+    {
+      "title": "Road",
+      "parameters": {
+        "imagerySet": "Road"
+      }
+    }
+  ]
+}

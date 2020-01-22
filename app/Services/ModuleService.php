@@ -161,6 +161,7 @@ use Fisharebest\Webtrees\Module\LifespansChartModule;
 use Fisharebest\Webtrees\Module\ListsMenuModule;
 use Fisharebest\Webtrees\Module\LoggedInUsersModule;
 use Fisharebest\Webtrees\Module\LoginBlockModule;
+use Fisharebest\Webtrees\Module\MapProviderModule;
 use Fisharebest\Webtrees\Module\MarriageReportModule;
 use Fisharebest\Webtrees\Module\MatomoAnalyticsModule;
 use Fisharebest\Webtrees\Module\MediaListModule;
@@ -216,12 +217,12 @@ use Fisharebest\Webtrees\Module\TopGivenNamesModule;
 use Fisharebest\Webtrees\Module\TopPageViewsModule;
 use Fisharebest\Webtrees\Module\TopSurnamesModule;
 use Fisharebest\Webtrees\Module\TreesMenuModule;
+use Fisharebest\Webtrees\Module\USPresidents;
 use Fisharebest\Webtrees\Module\UpcomingAnniversariesModule;
 use Fisharebest\Webtrees\Module\UserFavoritesModule;
 use Fisharebest\Webtrees\Module\UserJournalModule;
 use Fisharebest\Webtrees\Module\UserMessagesModule;
 use Fisharebest\Webtrees\Module\UserWelcomeModule;
-use Fisharebest\Webtrees\Module\USPresidents;
 use Fisharebest\Webtrees\Module\WebtreesTheme;
 use Fisharebest\Webtrees\Module\WelcomeBlockModule;
 use Fisharebest\Webtrees\Module\XeneaTheme;
@@ -415,6 +416,7 @@ class ModuleService
         'lists-menu'              => ListsMenuModule::class,
         'logged_in'               => LoggedInUsersModule::class,
         'login_block'             => LoginBlockModule::class,
+        'map-provider'            => MapProviderModule::class,
         'marriage_report'         => MarriageReportModule::class,
         'matomo-analytics'        => MatomoAnalyticsModule::class,
         'media'                   => MediaTabModule::class,

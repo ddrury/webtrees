@@ -1,0 +1,34 @@
+{
+  "title": "OpenStreetMap™",
+  "help": "",
+  "user_parameters": {},
+  "common": {
+    "parameters": {}
+  },
+  "styles": [
+    {
+      "title": "Deutsch",
+      "url": "https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png",
+      "parameters": {
+        "attribution": "Map data &copy; <a href=\"https://www.openstreetmap.org/\">Karte hergestellt aus OpenStreetMap-Daten</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>",
+        "max_zoom": 18
+      }
+    },
+    {
+      "title": "Français",
+      "url": "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
+      "parameters": {
+        "attribution": "<a href=\"https://www.openstreetmap.fr/association\">&copy;Openstreetmap France</a> | Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>",
+        "max_zoom": 20
+      }
+    },
+    {
+      "title": "Mapnik",
+      "url": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      "parameters": {
+        "attribution": "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>",
+        "max_zoom": 19
+      }
+    }
+  ]
+}

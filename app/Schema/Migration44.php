@@ -21,7 +21,6 @@ namespace Fisharebest\Webtrees\Schema;
 
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\Expression;
-use Illuminate\Database\Schema\Blueprint;
 
 /**
  * Upgrade the database schema from version 44 to version 45.
@@ -35,35 +34,15 @@ class Migration44 implements MigrationInterface
      */
     public function upgrade(): void
     {
-        if (!DB::schema()->hasColumn('placelocation', 'pl_latitude')) {
-            DB::schema()->table('placelocation', static function (Blueprint $table): void {
-                $table->float('pl_latitude')->nullable()->after('pl_lati');
-                $table->float('pl_longitude')->nullable()->after('pl_long');
-            });
-        }
+        // update `wt_site_setting`
+        // set `setting_name` = 'xxx', `setting_value` = if(`setting_value` = 'osm','1', '0')
+        // WHERE `setting_name` = 'map-provider'
 
-        DB::table('placelocation')
-            ->where('pl_lati', 'LIKE', 'N%')
-            ->update(['pl_latitude' => new Expression('CAST(SUBSTR(pl_lati, 2) AS FLOAT)')]);
-
-        DB::table('placelocation')
-            ->where('pl_lati', 'LIKE', 'S%')
-            ->update(['pl_latitude' => new Expression('- CAST(SUBSTR(pl_lati, 2) AS FLOAT)')]);
-
-        DB::table('placelocation')
-            ->where('pl_long', 'LIKE', 'E%')
-            ->update(['pl_longitude' => new Expression('CAST(SUBSTR(pl_long, 2) AS FLOAT)')]);
-
-        DB::table('placelocation')
-            ->where('pl_long', 'LIKE', 'W%')
-            ->update(['pl_longitude' => new Expression('- CAST(SUBSTR(pl_long, 2) AS FLOAT)')]);
-
-        DB::schema()->table('placelocation', static function (Blueprint $table): void {
-            $table->dropColumn('pl_lati');
-            $table->dropColumn('pl_long');
-            $table->dropColumn('pl_zoom');
-            $table->dropColumn('pl_icon');
-            $table->dropColumn('pl_level');
-        });
+        DB::table('site_setting')
+            ->where('setting_name', '=', 'map-provider')
+             ->update([
+                 'setting_name'  => 'SHOW_MAP_PLACE_HIERARCHY_LIST',
+                 'setting_value' => new Expression("IF('setting_value' = 'osm', '1', '0')")
+         ]);
     }
 }

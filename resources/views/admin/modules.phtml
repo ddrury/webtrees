@@ -15,6 +15,7 @@ use Fisharebest\Webtrees\Module\ModuleHistoricEventsInterface;
 use Fisharebest\Webtrees\Module\ModuleInterface;
 use Fisharebest\Webtrees\Module\ModuleLanguageInterface;
 use Fisharebest\Webtrees\Module\ModuleListInterface;
+use Fisharebest\Webtrees\Module\ModuleMapProviderInterface;
 use Fisharebest\Webtrees\Module\ModuleMenuInterface;
 use Fisharebest\Webtrees\Module\ModuleReportInterface;
 use Fisharebest\Webtrees\Module\ModuleSidebarInterface;
@@ -122,6 +123,10 @@ use Illuminate\Support\Collection;
                 <th title="<?= I18N::translate('Languages') ?>">
                     <?= view('icons/language') ?>
                     <span class="sr-only"><?= I18N::translate('Languages') ?></span>
+                </th>
+                <th title="<?= I18N::translate('Map providers') ?>">
+                    <?= view('icons/map') ?>
+                    <span class="sr-only"><?= I18N::translate('Map providers') ?></span>
                 </th>
             </tr>
         </thead>
@@ -265,6 +270,14 @@ use Illuminate\Support\Collection;
                         <?php if ($module instanceof ModuleLanguageInterface) : ?>
                             <?= view('icons/language') ?>
                             <span class="sr-only"><?= I18N::translate('Language') ?></span>
+                        <?php else : ?>
+                            -
+                        <?php endif ?>
+                    </td>
+                    <td class="text-center text-muted" title="<?= I18N::translate('Map provider') ?>">
+                        <?php if ($module instanceof ModuleMapProviderInterface) : ?>
+                            <?= view('icons/map') ?>
+                            <span class="sr-only"><?= I18N::translate('Map provider') ?></span>
                         <?php else : ?>
                             -
                         <?php endif ?>

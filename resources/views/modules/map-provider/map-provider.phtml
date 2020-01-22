@@ -1,0 +1,158 @@
+<?php
+
+use Fisharebest\Webtrees\Http\RequestHandlers\ControlPanel;
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\View;
+
+?>
+
+<?= view('components/breadcrumbs', ['links' => [route(ControlPanel::class) => I18N::translate('Control panel'), $title]]) ?>
+
+<h1><?= $title ?></h1>
+
+<form method="post">
+  <?= csrf_field() ?>
+
+    <fieldset>
+      <div class="row">
+        <span class="col-form-label col-sm-3">
+          <?= /* I18N: A configuration setting */
+            I18N::translate('Default map provider and style') ?>
+        </span>
+          <div class="col-sm-9">
+            <div class="row">
+              <div class="col-sm-6">
+                  <?= view('components/select', ['name' => 'PROVIDER', 'selected' => $data->default_provider, 'options' => $data->provider_names]) ?>
+              </div>
+              <div class="col-sm-6">
+                  <?= view('components/select', ['name' => 'STYLE', 'selected' => $data->default_style, 'options' => $data->selected_styles]) ?>
+              </div>
+            </div>
+          </div>
+          <p class="col-sm-9 offset-3 small text-muted">
+            <?= /* I18N: Help text for the “Default map provider configuration setting */ I18N::translate('The values for the provider and style set here will be used as the default when viewing a map') ?>
+          </p>
+      </div>
+    </fieldset>
+
+    <hr>
+
+    <?php foreach($data->config_data as $datum) : ?>
+      <h4 class="mb-0"><?= $datum->title ?></h4>
+
+      <fieldset>
+        <div class="row">
+          <span class="col-sm-3 col-form-label">
+            <?= I18N::translate('Enabled') ?>
+          </span>
+          <div class="col-sm-3">
+            <?= view('components/radios-inline', ['name' => $datum->name . '-enabled', 'options' => [I18N::translate('no'), I18N::translate('yes')], 'selected' => $datum->enabled]) ?>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <div class="row">
+          <?php foreach($datum->parameters as $key => $parameter) : ?>
+              <label for="<?= e($datum->name . '-' . $key) ?>" class="col-sm-3 col-form-label">
+                  <?= e($parameter->name) ?>
+              </label>
+              <div class="col-sm-9">
+                <input id="<?= e($datum->name . '-' . $key) ?>" class="form-control" dir="ltr" maxlength="255" type="text" required <?= $datum->enabled ? '' : 'disabled' ?> name="<?= e($datum->name . '-' . $key) ?>" value="<?= e($parameter->value) ?>">
+              </div>
+            <?php endforeach ?>
+          </div>
+      </fieldset>
+
+      <?php if($datum->parameters !== []) :?>
+        <p class="small text-muted offset-3 col-sm-9">
+          <?=I18N::translate('You will need an account and the following code(s) “%s“ from %s.', implode(', ', array_keys($datum->parameters)), $datum->help_url) ?>
+        </p>
+      <?php endif; ?>
+      <hr>
+    <?php endforeach ?>
+
+    <div class="form-group row">
+        <div class="col-sm-9">
+            <button type="submit" class="btn btn-primary">
+                <?= view('icons/save') ?>
+                <?= I18N::translate('save') ?>
+            </button>
+            <a href="<?= route(ControlPanel::class) ?>" class="btn btn-secondary">
+                <?= view('icons/cancel') ?>
+                <?= I18N::translate('cancel') ?>
+            </a>
+        </div>
+    </div>
+</form>
+
+<?php View::push('javascript') ?>
+<script>
+'use strict';
+
+$(function() {
+
+  let provider_selector = $('#PROVIDER');
+  let style_selector    = $('#STYLE');
+  let all_styles        = <?= json_encode($data->all_styles) ?>;
+  let default_style     = <?= json_encode($data->default_style) ?>;
+
+  let selected_provider = provider_selector.children('option:selected').val();
+
+  // set initial state of provider select box
+  $('.form-check').children('input:checked').each(function(ndx, item){
+    if ($(this).val() === '0') {
+      let id       = $(this).attr('id');
+      let provider = id.split('-')[0];
+      provider_selector.children('option[value="' + provider + '"]').hide();
+    }
+  });
+
+  // update default style dropdown on default provider change
+  provider_selector.on('change', function() {
+    let selected_provider = $(this).children("option:selected").val();
+
+    style_selector.children().remove();
+    $.each(all_styles[selected_provider], function(index, value) {
+      style_selector
+        .append($("<option></option>")
+        .attr("value", index)
+        .text(value));
+    });
+    style_selector.children('option[value="' + default_style + '"]').attr('selected', true);
+  });
+
+  // On change of provider enable/disable check box
+  $('.form-check').on('change', function() {
+    let id  = $(this).children('input').attr('id');
+    let val = $(this).children('.form-check-input').val();
+
+    //Enable/Disable form fields for this provider
+    let provider = id.split('-')[0];
+    let items    = $('.form-control[id^= "' + provider + '"]');
+    items.prop('disabled', !!!+val);
+
+    // Update default values
+    let pvr = provider_selector.children('option[value="' + provider + '"]');
+    if (val === '0') { // is the checkbox "0 = disabled" checked
+      if(pvr.is(':selected')) {
+        pvr
+          .attr('selected', false)
+          .siblings().first().attr('selected', true)
+          .trigger('change');
+      }
+      pvr.hide();
+    } else {
+      pvr.show();
+      if (provider === selected_provider) {
+        provider_selector.children('option').attr('selected', false);
+        pvr
+          .attr('selected', true)
+          .trigger('change');
+      }
+    }
+  });
+});
+
+</script>
+<?php View::endpush() ?>

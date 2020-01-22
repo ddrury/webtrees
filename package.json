@@ -29,13 +29,15 @@
     "jquery": "^3.5.1",
     "jquery-colorbox": "^1.6.4",
     "leaflet": "^1.7.1",
+    "leaflet-bing-layer": "^3.3.1",
     "leaflet-control-geocoder": "^1.13.0",
+    "leaflet.control.layers.tree": "^1.0.0",
     "leaflet.markercluster": "^1.4.1",
     "moment": "^2.29.0",
     "pinch-zoom-element": "^1.1.1",
     "popper.js": "^1.16.1",
     "select2": "4.0.13",
-    "sortablejs": "^1.10.2",
+    "sortablejs": "^1.12.0",
     "typeahead.js-bootstrap4-css": "^1.0.0"
   },
   "browserslist": [

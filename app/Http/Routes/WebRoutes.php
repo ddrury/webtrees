@@ -2,7 +2,7 @@
 
 /**
  * webtrees: online genealogy
- * Copyright (C) 2019 webtrees development team
+ * Copyright (C) 2020 webtrees development team
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -319,6 +319,8 @@ class WebRoutes
                 $router->get('locations-export', '/locations-export', 'Admin\LocationController::exportLocations');
                 $router->get('locations-import', '/locations-import', 'Admin\LocationController::importLocations');
                 $router->post('locations-import-action', '/locations-import', 'Admin\LocationController::importLocationsAction');
+                $router->get('gazetteer', '/gazetteer', 'Admin\GazetteerController::gazetteerNamesEdit');
+                $router->post('gazetteer-action', '/gazetteer', 'Admin\GazetteerController::gazetteerNamesSave');
                 $router->get('map-provider', '/map-provider', 'Admin\MapProviderController::mapProviderEdit');
                 $router->post('map-provider-action', '/map-provider', 'Admin\MapProviderController::mapProviderSave');
                 $router->post(ModuleDeleteSettings::class, '/module-delete-settings');

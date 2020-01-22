@@ -25,6 +25,7 @@ use Fisharebest\Webtrees\Gedcom;
 use Fisharebest\Webtrees\Http\RequestHandlers\ControlPanel;
 use Fisharebest\Webtrees\Http\RequestHandlers\MapDataList;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Module\ModuleMapProviderTrait;
 use Fisharebest\Webtrees\PlaceLocation;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\GedcomService;
@@ -73,6 +74,8 @@ use const UPLOAD_ERR_OK;
  */
 class LocationController extends AbstractAdminController
 {
+    use ModuleMapProviderTrait;
+
     // Location of files to import
     private const PLACES_FOLDER = 'places/';
 
@@ -195,13 +198,7 @@ class LocationController extends AbstractAdminController
             'map_bounds'      => $map_bounds,
             'marker_position' => $marker_position,
             'parent'          => $parent,
-            'provider'        => [
-                'url'     => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                'options' => [
-                    'attribution' => '<a href="https://www.openstreetmap.org/copyright">&copy; OpenStreetMap</a> contributors',
-                    'max_zoom'    => 19
-                ]
-            ],
+            'provider' => $this->providerDetails()
         ]);
     }
 

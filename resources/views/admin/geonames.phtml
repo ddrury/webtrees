@@ -2,29 +2,17 @@
 
 use Fisharebest\Webtrees\Http\RequestHandlers\ControlPanel;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Site;
+use Fisharebest\Webtrees\View;
 
 ?>
 
 <?= view('components/breadcrumbs', ['links' => [route(ControlPanel::class) => I18N::translate('Control panel'), $title]]) ?>
 
+<h1><?= $title ?></h1>
+
 <form method="post">
     <?= csrf_field() ?>
-
-    <div class="form-group">
-        <div class="form-row">
-            <label class="col-form-label col-sm-3" for="provider-default">
-                <?= I18N::translate('Map provider') ?>
-            </label>
-            <div class="col-sm-9">
-                <?= view('components/radios', ['name' => 'provider', 'selected' => $provider, 'options' => [
-                ''    => I18N::translate('Do not use maps'),
-                'osm' => I18N::translate('OpenStreetMap™'),
-                ]]) ?>
-            </div>
-        </div>
-    </div>
-
-    <hr>
 
     <div class="row form-group">
         <label class="col-sm-3 col-form-label" for="geonames">
@@ -45,15 +33,18 @@ use Fisharebest\Webtrees\I18N;
             </p>
         </div>
     </div>
-
     <hr>
 
     <div class="form-group row">
-        <div class="offset-sm-3 col-sm-9">
+        <div class="col-sm-9">
             <button type="submit" class="btn btn-primary">
                 <?= view('icons/save') ?>
                 <?= I18N::translate('save') ?>
             </button>
+            <a href="<?= route(ControlPanel::class) ?>" class="btn btn-secondary">
+                <?= view('icons/cancel') ?>
+                <?= I18N::translate('cancel') ?>
+            </a>
         </div>
     </div>
 </form>

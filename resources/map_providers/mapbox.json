@@ -1,0 +1,49 @@
+{
+  "title": "MapBox©",
+  "help": "<a href='https://account.mapbox.com/'>MapBox</a>",
+  "user_parameters": {
+    "Access Token": "accessToken"
+  },
+  "common": {
+    "url": "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
+    "parameters": {
+      "attribution": "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+      "tileSize": 512,
+      "zoomOffset": -1,
+      "maxZoom": 20,
+      "subdomains": "abcd"
+    }
+  },
+  "styles": [
+    {
+      "title": "Dark",
+      "parameters": {
+        "id": "mapbox/dark-v10"
+      }
+    },
+    {
+      "title": "Light",
+      "parameters": {
+        "id": "mapbox/light-v10"
+      }
+    },
+    {
+      "title": "Outdoors",
+      "parameters": {
+        "id": "mapbox/outdoors-v11"
+      }
+    },
+    {
+      "title": "Satellite",
+      "parameters": {
+        "id": "mapbox/satellite-v9"
+      }
+    },
+    {
+      "title": "Streets",
+      "parameters": {
+        "id": "mapbox/streets-v11"
+      }
+    }
+  ]
+}

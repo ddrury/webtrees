@@ -53,6 +53,7 @@ use function view;
 class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, RequestHandlerInterface
 {
     use ModuleChartTrait;
+    use ModuleMapProviderTrait;
 
     protected const ROUTE_URL  = '/tree/{tree}/pedigree-map-{generations}/{xref}';
 
@@ -181,9 +182,9 @@ class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, 
     public function chartUrl(Individual $individual, array $parameters = []): string
     {
         return route(static::class, [
-                'tree' => $individual->tree()->name(),
-                'xref' => $individual->xref(),
-            ] + $parameters + self::DEFAULT_PARAMETERS);
+            'tree' => $individual->tree()->name(),
+            'xref' => $individual->xref(),
+        ] + $parameters + self::DEFAULT_PARAMETERS);
     }
 
     /**
@@ -219,13 +220,7 @@ class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, 
 
         $map = view('modules/pedigree-map/chart', [
             'data'     => $this->getMapData($request),
-            'provider' => [
-                'url'    => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                'options' => [
-                    'attribution' => '<a href="https://www.openstreetmap.org/copyright">&copy; OpenStreetMap</a> contributors',
-                    'max_zoom'    => 19
-                ]
-            ]
+            'provider' => $this->providerDetails()
         ]);
 
         return $this->viewResponse('modules/pedigree-map/page', [

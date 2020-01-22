@@ -2,7 +2,7 @@
 
 /**
  * webtrees: online genealogy
- * Copyright (C) 2019 webtrees development team
+ * Copyright (C) 2020 webtrees development team
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -59,6 +59,7 @@ class SitePreferencesAction implements RequestHandlerInterface
         Site::setPreference('LANGUAGE', $params['LANGUAGE']);
         Site::setPreference('THEME_DIR', $params['THEME_DIR']);
         Site::setPreference('TIMEZONE', $params['TIMEZONE']);
+        Site::setPreference('SHOW_MAP_PLACE_HIERARCHY_LIST', $params['SHOW_MAP_PLACE_HIERARCHY_LIST']);
 
         FlashMessages::addMessage(I18N::translate('The website preferences have been updated.'), 'success');
         $url = route(ControlPanel::class);

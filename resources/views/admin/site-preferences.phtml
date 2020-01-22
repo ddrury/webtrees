@@ -91,6 +91,22 @@ use Fisharebest\Webtrees\Site;
         </div>
     </div>
 
+    <!-- SHOW_MAP_PLACE_HIERARCHY_LIST -->
+    <fieldset class="form-group">
+        <div class="row">
+            <legend class="col-form-label col-sm-3">
+                <?= /* I18N: A configuration setting */ I18N::translate('Map on the place hierarchy list') ?>
+            </legend>
+            <div class="col-sm-9">
+                <?= view('components/radios-inline', ['name' => 'SHOW_MAP_PLACE_HIERARCHY_LIST', 'options' => [I18N::translate('no'), I18N::translate('yes')], 'selected' => (int) Site::getPreference('SHOW_MAP_PLACE_HIERARCHY_LIST', 0)]) ?>
+                <p class="small text-muted">
+                    <?= /* I18N: Help text for the “Use map on place hierarchy” configuration setting */
+                     I18N::translate('This option controls whether or not to display a map on the place hierarchy.') ?>
+                </p>
+            </div>
+        </div>
+    </fieldset>
+
     <!-- ALLOW_CHANGE_GEDCOM -->
     <fieldset class="form-group">
         <div class="row">

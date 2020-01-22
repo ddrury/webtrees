@@ -25,7 +25,6 @@ use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\PlaceLocation;
-use Fisharebest\Webtrees\Site;
 use Illuminate\Support\Collection;
 use stdClass;
 
@@ -35,6 +34,7 @@ use stdClass;
 class PlacesModule extends AbstractModule implements ModuleTabInterface
 {
     use ModuleTabTrait;
+    use ModuleMapProviderTrait;
 
     protected const ICONS = [
         'BIRT' => ['color' => 'pink', 'name' => 'baby-carriage fas'],
@@ -97,7 +97,7 @@ class PlacesModule extends AbstractModule implements ModuleTabInterface
      */
     public function hasTabContent(Individual $individual): bool
     {
-        return Site::getPreference('map-provider') !== '' &&
+        return $this->mapsAvailable() &&
             $this->getMapData($individual)->features !== [];
     }
 
@@ -135,13 +135,7 @@ class PlacesModule extends AbstractModule implements ModuleTabInterface
     {
         return view('modules/places/tab', [
             'data'     => $this->getMapData($individual),
-            'provider' => [
-                'url'    => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                'options' => [
-                    'attribution' => '<a href="https://www.openstreetmap.org/copyright">&copy; OpenStreetMap</a> contributors',
-                    'max_zoom'    => 19
-                ]
-            ]
+            'provider' => $this->providerDetails()
         ]);
     }
 

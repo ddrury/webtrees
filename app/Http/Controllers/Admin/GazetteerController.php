@@ -2,7 +2,7 @@
 
 /**
  * webtrees: online genealogy
- * Copyright (C) 2019 webtrees development team
+ * Copyright (C) 2020 webtrees development team
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -28,18 +28,17 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Controller for maps and geographic data.
  */
-class MapProviderController extends AbstractAdminController
+class GazetteerController extends AbstractAdminController
 {
     /**
      * @param ServerRequestInterface $request
      *
      * @return ResponseInterface
      */
-    public function mapProviderEdit(ServerRequestInterface $request): ResponseInterface
+    public function gazetteerNamesEdit(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->viewResponse('admin/map-provider', [
-            'title'    => I18N::translate('Map provider'),
-            'provider' => Site::getPreference('map-provider'),
+        return $this->viewResponse('admin/geonames', [
+            'title'    => I18N::translate('GeoNames'),
             'geonames' => Site::getPreference('geonames'),
         ]);
     }
@@ -49,11 +48,9 @@ class MapProviderController extends AbstractAdminController
      *
      * @return ResponseInterface
      */
-    public function mapProviderSave(ServerRequestInterface $request): ResponseInterface
+    public function gazetteerNamesSave(ServerRequestInterface $request): ResponseInterface
     {
-        $settings = (array) $request->getParsedBody();
-
-        Site::setPreference('map-provider', $settings['provider']);
+        $settings   = (array) $request->getParsedBody();
         Site::setPreference('geonames', $settings['geonames']);
 
         return redirect(route(ControlPanel::class));
