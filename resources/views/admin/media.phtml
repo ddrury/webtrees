@@ -111,6 +111,7 @@ use Illuminate\Support\Collection;
     </thead>
 </table>
 <?= view('modals/create-media-from-file', ['media_types' => $media_types]) ?>
+<?= View('components/lightbox', ['gallery' => false]) ?>
 
 <?php View::push('javascript') ?>
 <script>
