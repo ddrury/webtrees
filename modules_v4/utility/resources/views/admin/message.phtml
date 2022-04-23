@@ -1,0 +1,21 @@
+<h2><?= $title ?></h2>
+
+<ul>
+  <?php foreach($body as $line): ?>
+    <li>
+      <?= $line ?>
+    </li>
+  <?php endforeach; ?>
+</ul>
+
+<div style="font-weight:bold; margin-top:1rem">
+  <?= $date ?>
+</div>
+
+<ul style="list-style-type: none">
+  <?php foreach($footer as $line): ?>
+    <li>
+      <?= $line ?>
+    </li>
+  <?php endforeach; ?>
+</ul>

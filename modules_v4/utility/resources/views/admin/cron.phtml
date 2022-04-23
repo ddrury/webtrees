@@ -1,0 +1,90 @@
+<?php
+
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\View;
+
+?>
+
+<h5 class="my-3"><?= I18N::translate('Select routines to add to the scheduler command') ?></h5>
+
+<div class="alert alert-warning" role="alert">
+  <?= I18N::translate('Please backup your data before running any of these routines') ?>
+</div>
+
+<div class="input-group">
+    <div class="input-group-prepend">
+        <span class="bg-light input-group-text"><?= I18N::translate('Scheduler command') ?></span>
+    </div>
+
+    <input id="cron" type="text" class="form-control" aria-label="" value='<?= $cmd ?> <?=$credentials?> "<?= $url ?>"' disabled="disabled" readonly="readonly" id="share-url-input">
+
+    <div class="input-group-append">
+        <button class="btn btn-primary" type="button" disabled='disabled' id="share-button"><?= view('icons/copy') ?><?= I18N::translate('Copy') ?></button>
+    </div>
+</div>
+
+<div class='card-body px-0 command'>
+  <?php foreach($routines as $key => $value): ?>
+    <?= view('components/checkbox', ['label' => $value, 'name' => $key, 'checked' => 0]) ?>
+  <?php endforeach; ?>
+</div>
+
+<div class='card-body p-0 mute'>
+    <?= view('components/checkbox', ['label' => I18N::translate('Silent Mode'), 'name' => 'mute', 'checked' => 0]) ?>
+    <p class="small text-muted">
+      When checked, will prevent the results email from being sent.
+    </p>
+</div>
+
+<?php View::push('javascript') ?>
+<script>
+'use strict';
+
+const cron = document.getElementById('cron');
+const share_btn = document.getElementById('share-button');
+const mute = document.querySelector('.mute');
+const command = document.querySelector('.command');
+const url = '<?= $url ?>'.split('?')[0];
+const searchParams = new URLSearchParams();
+const cmd = '<?= $cmd ?> <?= $credentials ?>';
+
+const buildUrl = () => {
+  searchParams.set('mute', mute.querySelectorAll("input[type='checkbox']:checked").length) ? 1 : 0;
+
+  let routines = [];
+  command.querySelectorAll("input[type='checkbox']:checked").forEach(checkbox => {
+    routines.push(checkbox.name);
+  });
+  searchParams.set('routines', routines.toString());
+
+  cron.value = `${cmd} "${url}?${decodeURIComponent(searchParams.toString())}"`;
+
+  share_btn.disabled = !routines.length;
+}
+
+mute.addEventListener('click', event => {
+  buildUrl();
+})
+
+command.querySelectorAll('.form-check').forEach(item => {
+  item.addEventListener('click', event => {
+    buildUrl();
+  })
+})
+
+share_btn.addEventListener('click', function () {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cron.value);
+  } else {
+    cron.disabled=false;
+    cron.select();
+    document.execCommand("copy");
+    cron.blur();
+    cron.disabled=true;
+  }
+  alert(<?= json_encode(I18N::translate('The command has been copied to the clipboard')) ?>);
+});
+
+
+</script>
+<?php View::endpush() ?>

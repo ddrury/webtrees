@@ -1,0 +1,96 @@
+/**
+ * webtrees: online genealogy
+ * Copyright (C) 2020 webtrees development team
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/* ---- custom.css -- */
+
+/* DD changes */
+
+#content {
+    --chart-line-radius: .35rem;
+    --sex-f-bg: #fff0f0;
+    --sex-m-bg: #e9fcfc;
+}
+
+#sidebar .dropdown-item {
+    padding: 0 0.25rem
+}
+
+.wt-family-navigator-dropdown {
+    max-width: 22vw;
+    overflow-x: scroll;
+}
+
+#sidebar .card {
+    overflow: initial;
+}
+
+.wt-block-header {
+    font-weight: 600;
+}
+
+.wt-block-content-todays_events, .wt-block-content-recent_changes, .wt-block-content-user_favorites, .wt-block-content-upcoming_events, .wt-block-content-gedcom_stats {
+    max-height: 35vh!important;
+    overflow-y: auto!important
+}
+
+.wt-block-content-todays_events .NAME, .wt-block-content-recent_changes .NAME, .wt-block-content-upcoming_events .NAME {
+    font-weight: 600!important;
+}
+
+.wt-block-content-user_messages {
+    min-height: 5vh;
+}
+
+.wt-register-caution .error {
+    font-weight: normal;
+}
+
+.wt-route-LoginPage p {
+    text-align: center;
+    font-weight: 600;
+}
+
+.wt-chart-box {
+    height: auto;
+    font-size: .9rem;
+}
+
+#welcome-card .semi-bold {
+    font-weight: 600;
+}
+
+#welcome-card .float-start {
+    padding-inline-end: 1rem;
+}
+
+#welcome-card .img-fluid {
+    pointer-events: none;
+}
+
+.dropdown-menu {
+    min-width: 14rem;
+}
+
+.disabled {
+    color: #333;
+}
+
+.wt-block-content-user_welcome>div {
+    flex-wrap: nowrap!important;
+}
+
+.wt-tab-facts .wt-facts-table {
+    table-layout: fixed;
+}

@@ -1,0 +1,70 @@
+<?php
+
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\View;
+
+?>
+
+<div class="alert alert-warning" role="alert">
+  <?= I18N::translate('Please backup your data before running any of these routines') ?>
+</div>
+
+<div class="row">
+  <label class="col-form-label col-sm-3" for="routine">
+    <?= I18N::translate('Routines') ?>
+  </label>
+  <div class="col-sm-9">
+    <select id='routine' name='routine' class='form-select'>
+      <option value='' selected disabled hidden><?= I18N::translate('Select a routine to run') ?></option>
+      <?php foreach ($routines as $key => $value) : ?>
+        <option value='<?= e($key) ?>'><?= e($value) ?></option>
+      <?php endforeach ?>
+    </select>
+  </div>
+</div>
+
+<div class="row mt-2">
+  <legend class="col-form-label col-sm-3" for="results">
+    <?= I18N::translate('Results') ?>
+  </legend>
+  <div class="col-sm-9">
+    <div id="results" class="p-2 bg-light border border-secondary"></div>
+  </div>
+</div>
+
+<?php View::push('styles') ?>
+<style>
+  #routine {width: auto}
+  #results {overflow-y:scroll;height: 50vh}
+</style>
+<?php View::endpush() ?>
+
+<?php View::push('javascript') ?>
+<script>
+  'use strict';
+
+  const please_wait = <?= json_encode(I18N::translate('Please be patient - this could take a while')) ?>;
+  const routine = document.getElementById('routine');
+  const results = document.getElementById('results');
+
+  routine.addEventListener('change', (event) => {
+    results.innerHTML = `<span class="text-muted">${please_wait}</span>`;
+    let formData = new FormData();
+    formData.append('routines', routine.options[routine.selectedIndex].value);
+    formData.append('_csrf', document.querySelector('meta[name=csrf]').content);
+
+    routine.selectedIndex = 0;
+    routine.blur();
+
+    fetch(<?= json_encode($url) ?>, {
+      credentials: 'same-origin',
+      body: formData,
+      method: 'POST',
+  })
+  .then(response => response.text())
+  .then(function (text) {
+    results.innerHTML = text;
+  });
+});
+</script>
+<?php View::endpush() ?>

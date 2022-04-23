@@ -1,0 +1,57 @@
+<?php
+
+use Fisharebest\Webtrees\Http\RequestHandlers\ModulesAllPage;
+use Fisharebest\Webtrees\Http\RequestHandlers\ControlPanel;
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\View;
+
+?>
+
+<?= view('components/breadcrumbs', ['links' => [route(ControlPanel::class) => I18N::translate('Control panel'), route(ModulesAllPage::class) => I18N::translate('All modules'), $title]]) ?>
+
+<div id="utility-admin-config">
+
+  <h1><?= $title ?></h1>
+
+  <!-- Tabs navs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab" aria-controls="Parameters" aria-selected="true"><?= I18N::translate('Parameters') ?></button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab" aria-controls="Scheduler" aria-selected="false"><?= I18N::translate('Scheduler setup') ?></button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab3" type="button" role="tab" aria-controls="Run" aria-selected="false"><?= I18N::translate('Run') ?></button>
+    </li>
+  </ul>
+  <!-- Tabs navs -->
+
+  <!-- Tabs content -->
+  <div class="tab-content mt-2">
+    <div id="tab1" class="tab-pane show active fade" role="tabpanel" aria-labelledby="tab1">
+      <?= view($module->name() . '::admin/options', [
+        'options'  => $module->options(),
+        'url'      => route('module', ['module' => $module->name() , 'action' => 'Admin']),
+        'timeouts' => $timeouts,
+      ]) ?>
+    </div>
+
+    <div id="tab2" class="tab-pane fade" role="tabpanel" aria-labelledby="tab2">
+      <?= view($module->name() . '::admin/cron', [
+        'routines' => $module->routines(),
+        'cmd'      => $module->options()->cron_command,
+        'credentials' => '-ucron:' . $module->cronKey(),
+        'url'      => route('module', ['module' => $module->name() , 'action' => 'Run', 'mute' => '0', 'routines' => '']),
+      ]) ?>
+    </div>
+
+    <div id="tab3" class="tab-pane fade" role="tabpanel" aria-labelledby="tab3">
+    <?= view($module->name() . '::admin/run', [
+        'routines' => $module->routines(),
+        'url'      => route('module', ['module' => $module->name() , 'action' => 'Run']),
+      ]) ?>
+    </div>
+  </div>
+  <!-- Tabs content -->
+</div>

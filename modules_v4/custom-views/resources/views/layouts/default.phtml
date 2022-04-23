@@ -1,0 +1,150 @@
+<?php
+
+use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\FlashMessages;
+use Fisharebest\Webtrees\Http\RequestHandlers\AppleTouchIconPng;
+use Fisharebest\Webtrees\Http\RequestHandlers\BrowserconfigXml;
+use Fisharebest\Webtrees\Http\RequestHandlers\SearchQuickAction;
+use Fisharebest\Webtrees\Http\RequestHandlers\WebmanifestJson;
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Module\ModuleFooterInterface;
+use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
+use Fisharebest\Webtrees\Module\ModuleThemeInterface;
+use Fisharebest\Webtrees\Services\ModuleService;
+use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\View;
+use Fisharebest\Webtrees\Webtrees;
+use Psr\Http\Message\ServerRequestInterface;
+
+/**
+ * @var string                 $content
+ * @var ServerRequestInterface $request
+ * @var string                 $title
+ * @var Tree                   $tree
+ */
+
+?>
+
+<!DOCTYPE html>
+<html dir="<?= I18N::locale()->direction() ?>" lang="<?= I18N::locale()->languageTag() ?>">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="csrf" content="<?= e(csrf_token()) ?>">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="<?= e($meta_robots ?? 'noindex') ?>">
+        <meta name="generator" content="<?= e(Webtrees::NAME) ?> <?= e(Webtrees::VERSION) ?>">
+        <meta name="description" content="<?= $meta_description ?? '' ?>">
+
+        <title>
+            <?= strip_tags($title) ?>
+            <?php if ($tree !== null && $tree->getPreference('META_TITLE') !== '') : ?>
+                – <?= e($tree->getPreference('META_TITLE')) ?>
+            <?php endif ?>
+        </title>
+
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+        <link rel="icon" type="image/png" href="/favicon.png">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+        <link rel="manifest" href="<?= e(route(WebmanifestJson::class)) ?>">
+
+        <link rel="stylesheet" href="<?= e(asset('css/vendor.min.css')) ?>">
+        <?php foreach (app(ModuleThemeInterface::class)->stylesheets() as $stylesheet) : ?>
+            <link rel="stylesheet" href="<?= e($stylesheet) ?>">
+        <?php endforeach ?>
+
+        <?= View::stack('styles') ?>
+
+        <?= app(ModuleService::class)->findByInterface(ModuleGlobalInterface::class)->map(static function (ModuleGlobalInterface $module): string {
+            return $module->headContent();
+        })->implode('') ?>
+    </head>
+
+    <body class="wt-global wt-theme-<?= e(app(ModuleThemeInterface::class)->name()) ?> wt-route-<?= e(substr(strrchr($request->getAttribute('route')->name ?? 'no-route', '\\'),1)) ?>">
+        <header class="wt-header-wrapper d-print-none">
+            <div class="container-lg wt-header-container">
+                <div class="row wt-header-content">
+                    <div class="wt-accessibility-links position-fixed">
+                        <a class="visually-hidden visually-hidden-focusable btn btn-info btn-sm" href="#content">
+                            <?= /* I18N: Skip over the headers and menus, to the main content of the page */
+                            I18N::translate('Skip to content') ?>
+                        </a>
+                    </div>
+                    <div class="col wt-site-logo"></div>
+
+                    <?php if ($tree !== null) : ?>
+                        <h1 class="col wt-site-title"><?= e($tree->title()) ?></h1>
+                    <?php endif ?>
+
+                    <div class="col wt-secondary-navigation">
+                        <ul class="nav wt-user-menu">
+                            <?php foreach (app(ModuleThemeInterface::class)->userMenu($tree) as $menu) : ?>
+                                <?= view('components/menu-item', ['menu' => $menu]) ?>
+                            <?php endforeach ?>
+                        </ul>
+                    </div>
+
+                    <?php if ($tree !== null) : ?>
+                        <nav class="col wt-primary-navigation">
+                            <ul class="nav wt-genealogy-menu">
+                                <?php foreach (app(ModuleThemeInterface::class)->genealogyMenu($tree) as $menu) : ?>
+                                    <?= view('components/menu-item', ['menu' => $menu]) ?>
+                                <?php endforeach ?>
+                            </ul>
+                        </nav>
+                    <?php endif ?>
+                </div>
+            </div>
+        </header>
+
+        <main id="content" class="wt-main-wrapper">
+            <div class="container-lg wt-main-container">
+                <div class="flash-messages">
+                    <?php foreach (FlashMessages::getMessages() as $message) : ?>
+                        <div class="alert alert-<?= e($message->status) ?> alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="<?= I18N::translate('close') ?>">
+                            </button>
+                            <?= $message->text ?>
+                        </div>
+                    <?php endforeach ?>
+                </div>
+
+                <?= $content ?>
+            </div>
+        </main>
+
+        <footer class="container-lg wt-footers d-print-none">
+            <?= app(ModuleService::class)->findByInterface(ModuleFooterInterface::class)->map(static function (ModuleFooterInterface $module) use ($request): string {
+                return $module->getFooter($request);
+            })->implode('') ?>
+        </footer>
+
+          <?= view('components/media-iframe') ?>
+
+        <script src="<?= e(asset('js/vendor.min.js')) ?>"></script>
+        <script src="<?= e(asset('js/webtrees.min.js')) ?>"></script>
+
+        <script>
+          'use strict'
+
+          spotlight.init({
+            showGallery: true,
+            closeOnBody: true,
+            filterTabs: true,
+            allowDownload: <?= json_encode(Auth::isMember($tree ?? new Tree(-1, 'DEFAULT', 'DEFAULT'))) ?>,
+          });
+
+          // Set title for tree menu item
+          // const treeMenu = document.querySelector('.menu-tree .nav-link');
+          // const text = '<?= I18N::translate('Site home page') ?>';
+          // treeMenu.setAttribute('title', text);
+          // treeMenu.innerHTML = text;
+        </script>
+
+        <?= View::stack('javascript') ?>
+
+        <?= app(ModuleService::class)->findByInterface(ModuleGlobalInterface::class)->map(static function (ModuleGlobalInterface $module): string {
+            return $module->bodyContent();
+        })->implode('') ?>
+    </body>
+</html>

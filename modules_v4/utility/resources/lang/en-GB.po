@@ -1,0 +1,364 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Webtrees utility module\n"
+"POT-Creation-Date: 2021-08-07 10:14+0100\n"
+"PO-Revision-Date: 2021-08-07 22:18+0100\n"
+"Last-Translator: \n"
+"Language-Team: david@drury.me.uk\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.2\n"
+"X-Poedit-Basepath: ../..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: translate\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: src/Functions/Functions.php:141
+msgid "Scan for changed files"
+msgstr "Scan for changed files"
+
+#: src/Functions/Functions.php:199
+#, php-format
+msgid "%s => %s"
+msgstr "%s => %s"
+
+#: src/Functions/Functions.php:207
+#, php-format
+msgid "%s added: %s"
+msgstr "%s added: %s"
+
+#: src/Functions/Functions.php:209 src/Functions/Functions.php:287
+#, php-format
+msgid "%s deleted"
+msgstr "%s deleted"
+
+#: src/Functions/Functions.php:211
+#, php-format
+msgid "%s modified: %s"
+msgstr "%s modified: %s"
+
+#: src/Functions/Functions.php:220
+msgid "Scan for changed files complete"
+msgstr "Scan for changed files complete"
+
+#: src/Functions/Functions.php:229
+msgid "Remove unused locations"
+msgstr "Remove unused locations"
+
+#: src/Functions/Functions.php:289
+#, php-format
+msgid "Removed %d locations"
+msgstr "Removed %d locations"
+
+#: src/Functions/Functions.php:304
+msgid "Bulk media renaming"
+msgstr "Bulk media renaming"
+
+#: src/Functions/Functions.php:342
+#, php-format
+msgid "Failed to rename file %s"
+msgstr "Failed to rename file %s"
+
+#: src/Functions/Functions.php:344
+#, php-format
+msgid "Renamed file from %s to %s"
+msgstr "Renamed file from %s to %s"
+
+#: src/Functions/Functions.php:347
+#, php-format
+msgid "Bulk rename complete. %d items scanned"
+msgstr "Bulk rename complete. %d items scanned"
+
+#: src/Functions/Functions.php:423
+msgid "User Activity"
+msgstr "User Activity"
+
+#: src/Functions/Functions.php:433
+#, php-format
+msgid "%s on %s at %s from %s"
+msgstr "%s on %s at %s from %s"
+
+#: src/Functions/Functions.php:436
+#, php-format
+msgid "User activity complete - %d actions found"
+msgstr "User activity complete - %d actions found"
+
+#: src/Functions/Functions.php:446 src/Modules/Utility.php:185
+msgid "Housekeeping"
+msgstr "Housekeeping"
+
+#: src/Functions/Functions.php:450
+#| msgid "Deleted cache"
+msgid "Processed cache"
+msgstr "Processed cache"
+
+#: src/Functions/Functions.php:453
+#| msgid "Deleted temporary files"
+msgid "Processed temporary files"
+msgstr "Processed temporary files"
+
+#: src/Functions/Functions.php:456
+#| msgid "Deleted old logs"
+msgid "Processed old logs"
+msgstr "Processed old logs"
+
+#: src/Functions/Functions.php:459
+#| msgid "Deleted old sessions"
+msgid "Processed old sessions"
+msgstr "Processed old sessions"
+
+#: src/Functions/Functions.php:461
+msgid "Housekeeping complete"
+msgstr "Housekeeping complete"
+
+#: src/Functions/Functions.php:472
+msgid "Reorder Media"
+msgstr "Reorder Media"
+
+#: src/Functions/Functions.php:488
+#, php-format
+msgid "Ordering media for %s (%s)"
+msgstr "Ordering media for %s (%s)"
+
+#: src/Functions/Functions.php:526
+#, php-format
+msgid "Reorder media complete. %d Inviduals updated, %d Media objects updated"
+msgstr "Reorder media complete. %d Inviduals updated, %d Media objects updated"
+
+#: src/Functions/Functions.php:537 src/Modules/Utility.php:184
+msgid "Gedcom changes in the last 24 hours"
+msgstr "Gedcom changes in the last 24 hours"
+
+#: src/Functions/Functions.php:550
+#, php-format
+#| msgid "Deleted cache"
+msgid "Deleted: %s"
+msgstr "Deleted: %s"
+
+#: src/Functions/Functions.php:559
+#, php-format
+#| msgid "Action: %s, %s - %s on %s at %s by %s"
+msgid "%s %s (%s) on %s at %s by %s"
+msgstr "%s %s (%s) on %s at %s by %s"
+
+#: src/Functions/Functions.php:563
+#, php-format
+msgid "%s edits in the last 24 hours"
+msgstr "%s edits in the last 24 hours"
+
+#: src/Helpers/Message.php:71
+msgid "Routine complete"
+msgstr "Routine complete"
+
+#: src/Modules/Utility.php:182
+msgid "Create a catalogue of changed files"
+msgstr "Create a catalogue of changed files"
+
+#: src/Modules/Utility.php:183
+msgid "Delete unused locations"
+msgstr "Delete unused locations"
+
+#: src/Modules/Utility.php:186
+msgid "Rename media"
+msgstr "Rename media"
+
+#: src/Modules/Utility.php:187
+msgid "Show user activity in the last 24 hours"
+msgstr "Show user activity in the last 24 hours"
+
+#: src/Modules/Utility.php:188
+msgid "Sort Media like webtrees 1.7"
+msgstr "Sort Media like webtrees 1.7"
+
+#: src/Modules/Utility.php:214
+msgid "One hour"
+msgstr "One hour"
+
+#: src/Modules/Utility.php:215
+msgid "Twelve hours"
+msgstr "Twelve hours"
+
+#: src/Modules/Utility.php:216
+msgid "One day"
+msgstr "One day"
+
+#: src/Modules/Utility.php:217
+msgid "One week"
+msgstr "One week"
+
+#: src/Modules/Utility.php:218
+msgid "One month"
+msgstr "One month"
+
+#: src/Modules/Utility.php:219
+msgid "Two months"
+msgstr "Two months"
+
+#: src/Modules/Utility.php:220
+msgid "Three months"
+msgstr "Three months"
+
+#: src/Modules/Utility.php:238
+#, php-format
+msgid "The options for the module “%s” have been updated."
+msgstr ""
+
+#: resources/views/admin/config.phtml:10
+msgid "Control panel"
+msgstr ""
+
+#: resources/views/admin/config.phtml:10
+msgid "All modules"
+msgstr ""
+
+#: resources/views/admin/config.phtml:19
+msgid "Parameters"
+msgstr "Parameters"
+
+#: resources/views/admin/config.phtml:22
+#| msgid "Scheduler command"
+msgid "Scheduler setup"
+msgstr "Scheduler setup"
+
+#: resources/views/admin/config.phtml:25
+msgid "Run"
+msgstr "Run"
+
+#: resources/views/admin/cron.phtml:8
+msgid "Select routines to add to the scheduler command"
+msgstr "Select routines to add to the scheduler command"
+
+#: resources/views/admin/cron.phtml:11 resources/views/admin/run.phtml:9
+msgid "Please backup your data before running any of these routines"
+msgstr "Please backup your data before running any of these routines"
+
+#: resources/views/admin/cron.phtml:16
+msgid "Scheduler command"
+msgstr "Scheduler command"
+
+#: resources/views/admin/cron.phtml:22
+msgid "Copy"
+msgstr ""
+
+#: resources/views/admin/cron.phtml:33
+msgid "Silent Mode"
+msgstr "Silent Mode"
+
+#: resources/views/admin/cron.phtml:84
+msgid "The command has been copied to the clipboard"
+msgstr ""
+
+#: resources/views/admin/options.phtml:12
+msgid "Name of the manifest file"
+msgstr "Name of the manifest file"
+
+#: resources/views/admin/options.phtml:17
+msgid ""
+"The manifest file stores information about each and every file in the "
+"webtrees installation. The correct file extension will be appended "
+"automatically."
+msgstr ""
+"The manifest file stores information about each and every file in the "
+"webtrees installation. The correct file extension will be appended "
+"automatically."
+
+#: resources/views/admin/options.phtml:26
+msgid "Title of results email"
+msgstr "Title of results email"
+
+#: resources/views/admin/options.phtml:33
+msgid ""
+"When any of the routines here are run from a Scheduler job, a system email "
+"containing the results will be generated, This option sets the title of that "
+"email"
+msgstr ""
+"When any of the routines here are run from a Scheduler job, a system email "
+"containing the results will be generated, This option sets the title of that "
+"email"
+
+#: resources/views/admin/options.phtml:42
+msgid "Media filename prefix"
+msgstr "Media filename prefix"
+
+#: resources/views/admin/options.phtml:49
+msgid ""
+"Whatever is entered here will form the first characters of the new media "
+"object filename (safest to limit to a few meaningful characters)"
+msgstr ""
+"Whatever is entered here will form the first characters of the new media "
+"object filename (safest to limit to a few meaningful characters)"
+
+#: resources/views/admin/options.phtml:58
+#| msgid "Scheduler command"
+msgid "Cron command"
+msgstr "Cron command"
+
+#: resources/views/admin/options.phtml:65
+msgid "The command and parameters used to initiate a cron command"
+msgstr "The command and parameters used to initiate a cron command"
+
+#: resources/views/admin/options.phtml:74
+msgid "Housekeeping periods"
+msgstr "Housekeeping periods"
+
+#: resources/views/admin/options.phtml:83
+msgid "Temporary files"
+msgstr "Temporary files"
+
+#: resources/views/admin/options.phtml:91
+msgid "Cache"
+msgstr "Cache"
+
+#: resources/views/admin/options.phtml:99
+msgid "Logs"
+msgstr "Logs"
+
+#: resources/views/admin/options.phtml:107
+msgid "Sessions"
+msgstr "Sessions"
+
+#: resources/views/admin/options.phtml:118
+msgid "Remove custom media tags"
+msgstr "Remove custom media tags"
+
+#: resources/views/admin/options.phtml:121
+msgid "no"
+msgstr ""
+
+#: resources/views/admin/options.phtml:121
+msgid "yes"
+msgstr ""
+
+#: resources/views/admin/options.phtml:123
+msgid "When re-ordering media it is possible to remove custom tags"
+msgstr "When re-ordering media it is possible to remove custom tags"
+
+#: resources/views/admin/options.phtml:130
+msgid "save"
+msgstr ""
+
+#: resources/views/admin/options.phtml:134
+msgid "reset"
+msgstr ""
+
+#: resources/views/admin/run.phtml:14
+msgid "Routines"
+msgstr "Routines"
+
+#: resources/views/admin/run.phtml:18
+msgid "Select a routine to run"
+msgstr "Select a routine to run"
+
+#: resources/views/admin/run.phtml:28
+msgid "Results"
+msgstr "Results"
+
+#: resources/views/admin/run.phtml:46
+msgid "Please be patient - this could take a while"
+msgstr "Please be patient - this could take a while"
+
+#~ msgid "Do Housekeeping"
+#~ msgstr "Do Housekeeping"

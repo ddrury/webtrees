@@ -1,0 +1,136 @@
+<?php
+
+use Fisharebest\Webtrees\I18N;
+?>
+
+<form method="post" action="<?= $url ?>">
+  <?= csrf_field() ?>
+
+  <fieldset class="form-group">
+    <div class="row">
+      <legend class="col-form-label col-sm-3" for="i1">
+        <?= I18N::translate('Name of the manifest file') ?>
+      </legend>
+      <div class="col-sm-9">
+        <input type="text" id="i1" name="manifest" value="<?= $options->manifest ?>" class="form-control" required="required" maxlength="120" dir="auto">
+        <p class="small text-muted">
+          <?= I18N::translate("The manifest file stores information about each and every file in the webtrees installation. The correct file extension will be appended automatically.") ?>
+        </p>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset class="form-group">
+    <div class="row">
+      <legend class="col-form-label col-sm-3" for="i2">
+        <?= I18N::translate('Title of results email') ?>
+      </legend>
+      <div class="col-sm-9">
+        <div class="input-group">
+          <input type="text" dir="ltr" id="i2" class="editable form-control" name="email_title" placeholder="" value="<?= $options->email_title ?>">
+        </div>
+        <p class="small text-muted">
+          <?= I18N::translate('When any of the routines here are run from a Scheduler job, a system email containing the results will be generated, This option sets the title of that email'); ?>
+        </p>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset class="form-group">
+    <div class="row">
+    <legend class="col-form-label col-sm-3" for="i3">
+      <?= I18N::translate('Media filename prefix') ?>
+    </legend>
+    <div class="col-sm-9">
+      <div class="input-group">
+        <input type="text" dir="ltr" id="i3" class="editable form-control" name="media_prefix" value="<?= $options->media_prefix ?>">
+      </div>
+      <p class="small text-muted">
+          <?= I18N::translate('Whatever is entered here will form the first characters of the new media object filename (safest to limit to a few meaningful characters)');?>
+        </p>
+    </div>
+  </div>
+  </fieldset>
+
+  <fieldset class="form-group">
+    <div class="row">
+    <legend class="col-form-label col-sm-3" for="i4">
+      <?= I18N::translate('Cron command') ?>
+    </legend>
+    <div class="col-sm-9">
+      <div class="input-group">
+        <input type="text" dir="ltr" id="i4" class="editable form-control" name="cron_command" value="<?= $options->cron_command ?>">
+      </div>
+      <p class="small text-muted">
+          <?= I18N::translate('The command and parameters used to initiate a cron command');?>
+        </p>
+    </div>
+  </div>
+  </fieldset>
+
+  <fieldset class="form-group">
+    <div class="row">
+      <legend class="col-form-label col-sm-3">
+        <?= /* I18N: A configuration setting */ I18N::translate('Housekeeping periods') ?>
+      </legend>
+      <div class="col-sm-9">
+        <div class="row">
+          <div class="col-sm-3">
+            <div class="input-group">
+              <?= view('components/select', ['name' => 'timeout_tmp', 'selected' => $options->timeout_tmp, 'options' => $timeouts]) ?>
+            </div>
+            <p class="small text-muted">
+              <?= I18N::translate('Temporary files') ?>
+            </p>
+          </div>
+          <div class="col-sm-3">
+            <div class="input-group">
+              <?= view('components/select', ['name' => 'timeout_cache', 'selected' => $options->timeout_cache, 'options' => $timeouts]) ?>
+            </div>
+            <p class="small text-muted">
+              <?= I18N::translate('Cache');?>
+            </p>
+          </div>
+          <div class="col-sm-3">
+            <div class="input-group">
+              <?= view('components/select', ['name' => 'timeout_logs', 'selected' => $options->timeout_logs, 'options' => $timeouts]) ?>
+            </div>
+            <p class="small text-muted">
+              <?= I18N::translate('Logs');?>
+            </p>
+          </div>
+          <div class="col-sm-3">
+            <div class="input-group">
+              <?= view('components/select', ['name' => 'timeout_session', 'selected' => $options->timeout_session, 'options' => $timeouts]) ?>
+            </div>
+            <p class="small text-muted">
+              <?= I18N::translate('Sessions');?>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset class="form-group">
+    <div class="row">
+      <legend class="col-form-label col-sm-3">
+        <?= /* I18N: A configuration setting */ I18N::translate('Remove custom media tags') ?>
+      </legend>
+      <div class="col-sm-9">
+        <?= view('components/radios-inline', ['name' => 'del_custom_tags', 'options' => [I18N::translate('no'), I18N::translate('yes')], 'selected' => (int) $options->del_custom_tags]) ?>
+        <p class="small text-muted">
+              <?= I18N::translate('When re-ordering media it is possible to remove custom tags');?>
+            </p>
+      </div>
+    </div>
+  </fieldset>
+
+  <button class="btn btn-primary" type="submit">
+    <?= I18N::translate('save') ?>
+  </button>
+
+  <button class="btn btn-secondary" type="reset">
+    <?= I18N::translate('reset') ?>
+  </button>
+</form>
