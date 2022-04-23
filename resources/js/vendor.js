@@ -83,6 +83,9 @@ import 'leaflet-control-geocoder';
 import 'leaflet.control.layers.tree';
 import 'leaflet-bing-layer';
 
+// import 'spotlight' imports the bundle including css into the same file
+window.Spotlight = require('spotlight.js/src/js/spotlight.js');
+
 window.$ = window.jQuery = $;
 
 library.add(

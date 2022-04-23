@@ -55,6 +55,18 @@ class MediaFile
         'image/webp',
     ];
 
+    private const SUPPORTED_VIDEO_MIME_TYPES = [
+        'video/ogg',
+        'video/mp4',
+        'video/webm',
+    ];
+
+    private const SUPPORTED_AUDIO_MIME_TYPES = [
+        'audio/ogg',
+        'audio/flac',
+        'audio/mpeg',
+    ];
+
     private string $multimedia_file_refn = '';
 
     private string $multimedia_format = '';
@@ -175,50 +187,49 @@ class MediaFile
      */
     public function displayImage(int $width, int $height, string $fit, array $image_attributes = []): string
     {
-        if ($this->isExternal()) {
-            $src    = $this->multimedia_file_refn;
-            $srcset = [];
-        } else {
-            // Generate multiple images for displays with higher pixel densities.
-            $src    = $this->imageUrl($width, $height, $fit);
-            $srcset = [];
-            foreach ([2, 3, 4] as $x) {
-                $srcset[] = $this->imageUrl($width * $x, $height * $x, $fit) . ' ' . $x . 'x';
-            }
+        $link_attributes = [
+            'type'              => $this->mimeType(),
+            'class'             => 'media',
+            'href'              => $this->downloadUrl('inline'),
+            'data-title'        => strip_tags($this->media->fullName()),
+            'data-description'  => Registry::markdownFactory()->markdown($this->media->getNote()),
+        ];
+
+        $image = view('icons/mime', ['type' => $this->mimeType()]);
+
+        switch ($this->supportedType()) {
+            case 'image':
+                // Generate multiple images for displays with higher pixel densities.
+                $src    = $this->imageUrl($width, $height, $fit);
+                $srcset = [];
+                foreach ([2, 3, 4] as $x) {
+                    $srcset[] = $this->imageUrl($width * $x, $height * $x, $fit) . ' ' . $x . 'x';
+                }
+                $image = '<img ' . Html::attributes($image_attributes + [
+                    'dir'    => 'auto',
+                    'src'    => $src,
+                    'srcset' => implode(',', $srcset),
+                    'alt'    => strip_tags($this->media->fullName()),
+                ]) . '>';
+                $link_attributes['data-media'] = 'image';
+                unset($link_attributes['data-title']);
+                break;
+            case 'audio':
+            case 'video':
+                $link_attributes = array_merge($link_attributes, [
+                    'data-media' => 'video',
+                    'href'       => '#',
+                    'data-src'   => $this->downloadUrl('inline'),
+                ]);
+                break;
+            default:
+                $link_attributes = array_merge($link_attributes, [
+                    'data-media' => 'node',
+                    'data-src'   => '#node-container'
+                ]);
         }
 
-        if ($this->isImage()) {
-            $image = '<img ' . Html::attributes($image_attributes + [
-                        'dir'    => 'auto',
-                        'src'    => $src,
-                        'srcset' => implode(',', $srcset),
-                        'alt'    => strip_tags($this->media->fullName()),
-                    ]) . '>';
-
-            $link_attributes = Html::attributes([
-                'class'      => 'gallery',
-                'type'       => $this->mimeType(),
-                'href'       => $this->downloadUrl('inline'),
-                'data-title' => strip_tags($this->media->fullName()),
-            ]);
-        } else {
-            $image = view('icons/mime', ['type' => $this->mimeType()]);
-
-            $link_attributes = Html::attributes([
-                'type' => $this->mimeType(),
-                'href' => $this->downloadUrl('inline'),
-            ]);
-        }
-
-        return '<a ' . $link_attributes . '>' . $image . '</a>';
-    }
-
-    /**
-     * Is the media file actually a URL?
-     */
-    public function isExternal(): bool
-    {
-        return str_contains($this->multimedia_file_refn, '://');
+        return '<a ' . Html::attributes($link_attributes) . '>' . $image . '</a>';
     }
 
     /**
@@ -257,11 +268,37 @@ class MediaFile
     }
 
     /**
+     * Return the type of this media file (assuming we support it)
+     */
+    public function supportedType(): string
+    {
+        if (str_contains($this->multimedia_file_refn, '://')) {
+            return 'external';
+        } elseif (in_array($this->mimeType(), self::SUPPORTED_IMAGE_MIME_TYPES, true)) {
+            return 'image';
+        } elseif (in_array($this->mimeType(), self::SUPPORTED_VIDEO_MIME_TYPES, true)) {
+            return 'video';
+        } elseif (in_array($this->mimeType(), self::SUPPORTED_AUDIO_MIME_TYPES, true)) {
+            return 'audio';
+        }
+
+        return 'unknown';
+    }
+
+    /**
+     * Is the media file actually a URL?
+     */
+    public function isExternal(): bool
+    {
+        return $this->supportedType() === 'external';
+    }
+
+    /**
      * Is the media file an image?
      */
     public function isImage(): bool
     {
-        return in_array($this->mimeType(), self::SUPPORTED_IMAGE_MIME_TYPES, true);
+        return $this->supportedType() === 'image';
     }
 
     /**

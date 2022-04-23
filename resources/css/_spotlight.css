@@ -1,0 +1,71 @@
+/**
+ * webtrees: online genealogy
+ * Copyright (C) 2021 webtrees development team
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/* https://github.com/nextapps-de/spotlight */
+
+/* webtrees theme for spotlight
+   extends default theme (black)
+*/
+
+#spotlight.webtrees {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+#spotlight.webtrees .spl-progress {
+    background-color: #ff0000;
+}
+
+#spotlight.webtrees .spl-theme {
+    display: none;
+}
+
+#spotlight.webtrees .spl-title {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+#spotlight.webtrees .spl-description {
+    margin-top: -20px;
+}
+
+#spotlight.webtrees p {
+    margin-bottom: 0;
+}
+
+#node-content, #spotlight.webtrees .spl-pane>img {
+    border: 5px ridge #eeeeee;
+}
+
+/* For content placed into an iframe assume an aspect ration of 16:9 */
+
+#node-container {
+    display: none;
+    position: relative;
+    height: 0;
+    padding-bottom: calc((9/16) * 100%);
+}
+
+#spotlight.webtrees #node-container {
+    display: block;
+}
+
+#node-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 85%;
+    height: 85%;
+}

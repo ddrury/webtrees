@@ -131,7 +131,7 @@ class ManageMediaData implements RequestHandlerInterface
 
                 try {
                     $mime_type = Registry::filesystem()->data()->mimeType($path);
-                } catch (UnableToRetrieveMetadata) {
+                } catch (UnableToRetrieveMetadata $ex) {
                     $mime_type = Mime::DEFAULT_TYPE;
                 }
 
@@ -143,8 +143,8 @@ class ManageMediaData implements RequestHandlerInterface
                 }
 
                 $url = route(AdminMediaFileDownload::class, ['path' => $path]);
-                $img = '<a href="' . e($url) . '" type="' . $mime_type . '" class="gallery">' . $img . '</a>';
-            } catch (UnableToReadFile) {
+                $img = '<a href="' . e($url) . '" type="' . $mime_type . '" class="media">' . $img . '</a>';
+            } catch (UnableToReadFile $ex) {
                 $url = route(AdminMediaFileThumbnail::class, ['path' => $path]);
                 $img = '<img src="' . e($url) . '">';
             }

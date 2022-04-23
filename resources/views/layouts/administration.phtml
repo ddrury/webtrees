@@ -41,7 +41,8 @@ use Fisharebest\Webtrees\View;
     return $module instanceof ModuleCustomInterface || $module instanceof CustomCssJsModule ? '' : $module->headContent();
         })->implode('') ?>
     </head>
-    <body class="container-lg wt-global wt-control-panel">
+    <body>
+      <div class="container-lg wt-global wt-control-panel overflow-hidden">
         <header>
             <div class="wt-accessibility-links position-fixed">
                 <a class="visually-hidden visually-hidden-focusable btn btn-info btn-sm" href="#content">
@@ -83,8 +84,16 @@ use Fisharebest\Webtrees\View;
         </main>
 
 
+        <?= view('components/media-iframe') ?>
+
         <script src="<?= e(asset('js/vendor.min.js')) ?>"></script>
         <script src="<?= e(asset('js/webtrees.min.js')) ?>"></script>
+        <script>
+          spotlight.init({
+            showGallery: false,
+            closeOnBody: true,
+          });
+        </script>
 
         <?= View::stack('javascript') ?>
 
