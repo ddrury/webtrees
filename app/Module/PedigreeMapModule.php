@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Module;
 
+use Aura\Router\RouterContainer;
 use Fig\Http\Message\RequestMethodInterface;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Fact;
@@ -31,13 +32,18 @@ use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\ChartService;
 use Fisharebest\Webtrees\Services\LeafletJsService;
 use Fisharebest\Webtrees\Services\RelationshipService;
+use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Validator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+use function app;
 use function array_key_exists;
+use function assert;
+use function count;
 use function intdiv;
+use function is_string;
 use function redirect;
 use function route;
 use function ucfirst;
@@ -178,24 +184,16 @@ class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, 
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+
         $tree        = Validator::attributes($request)->tree();
         $user        = Validator::attributes($request)->user();
         $generations = Validator::attributes($request)->isBetween(self::MINIMUM_GENERATIONS, self::MAXIMUM_GENERATIONS)->integer('generations');
         $xref        = Validator::attributes($request)->isXref()->string('xref');
 
-        // Convert POST requests into GET requests for pretty URLs.
-        if ($request->getMethod() === RequestMethodInterface::METHOD_POST) {
-            return redirect(route(static::class, [
-                'tree'        => $tree->name(),
-                'xref'        => Validator::parsedBody($request)->isXref()->string('xref'),
-                'generations' => Validator::parsedBody($request)->isBetween(self::MINIMUM_GENERATIONS, self::MAXIMUM_GENERATIONS)->integer('generations'),
-            ]));
-        }
-
         Auth::checkComponentAccess($this, ModuleChartInterface::class, $tree, $user);
 
-        $individual  = Registry::individualFactory()->make($xref, $tree);
-        $individual  = Auth::checkIndividualAccess($individual, false, true);
+        $individual = Registry::individualFactory()->make($xref, $tree);
+        $individual = Auth::checkIndividualAccess($individual, false, true);
 
         $map = view('modules/pedigree-map/chart', [
             'data'           => $this->getMapData($request),
@@ -229,6 +227,7 @@ class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, 
         ];
 
         $sosa_points = [];
+        $lines = [];
 
         foreach ($facts as $sosa => $fact) {
             $location = new PlaceLocation($fact->place()->gedcomName());
@@ -244,18 +243,15 @@ class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, 
             }
 
             if ($latitude !== null && $longitude !== null) {
-                $polyline           = null;
                 $sosa_points[$sosa] = [$latitude, $longitude];
                 $sosa_child         = intdiv($sosa, 2);
-                $generation         = (int) log($sosa, 2);
-                $color              = 'var(--wt-pedigree-map-gen-' . $generation % self::COUNT_CSS_COLORS . ')';
-                $class              = 'wt-pedigree-map-gen-' . $generation % self::COUNT_CSS_COLORS;
+                $color              = 'var(--wt-pedigree-map-gen-' . $sosa_child % self::COUNT_CSS_COLORS . ')';
 
                 if (array_key_exists($sosa_child, $sosa_points)) {
                     // Would like to use a GeometryCollection to hold LineStrings
                     // rather than generate polylines but the MarkerCluster library
                     // doesn't seem to like them
-                    $polyline = [
+                    $lines[] = [
                         'points'  => [
                             $sosa_points[$sosa_child],
                             [$latitude, $longitude],
@@ -273,21 +269,23 @@ class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, 
                         'coordinates' => [$longitude, $latitude],
                     ],
                     'properties' => [
-                        'polyline'  => $polyline,
                         'iconcolor' => $color,
                         'tooltip'   => null,
                         'summary'   => view('modules/pedigree-map/events', [
-                            'class'        => $class,
                             'fact'         => $fact,
-                            'relationship' => $this->getSosaName($sosa),
+                            'relationship' => ucfirst($this->getSosaName($sosa)),
                             'sosa'         => $sosa,
+                            'class'        => 'wt-pedigree-map-gen-' . $sosa_child % self::COUNT_CSS_COLORS,
                         ]),
                     ],
                 ];
             }
         }
 
-        return $geojson;
+        return [
+            'geoJSON'   => $geojson,
+            'polylines' => $lines,
+        ];
     }
 
     /**
@@ -298,6 +296,7 @@ class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, 
      */
     protected function getPedigreeMapFacts(ServerRequestInterface $request, ChartService $chart_service): array
     {
+
         $tree        = Validator::attributes($request)->tree();
         $generations = Validator::attributes($request)->isBetween(self::MINIMUM_GENERATIONS, self::MAXIMUM_GENERATIONS)->integer('generations');
         $xref        = Validator::attributes($request)->isXref()->string('xref');
