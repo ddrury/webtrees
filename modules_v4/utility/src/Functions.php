@@ -44,6 +44,7 @@ use Fisharebest\Webtrees\User;
 use Fisharebest\Webtrees\Webtrees;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\Expression;
+use Illuminate\Support\Str;
 use League\Flysystem\FilesystemOperator;
 use stdClass;
 
@@ -611,4 +612,31 @@ class Functions
 
         return $msg;
     }
+
+    /**
+     *
+     * @return Message
+     */
+    public function errors(): Message
+    {
+        $msg = new Message(I18N::translate('Errors in the last 24 hours'));
+
+        $records = DB::table('log')
+            ->select('log_time', 'log_message', 'ip_address')
+            ->where('log_type', '=', 'error')
+            ->where('log_time', '>', Registry::timestampFactory()->now()->subtractDays(1)->toDateTimeString())
+            ->orderBy('log_time', 'desc')
+            ->get();
+
+        foreach ($records as $record) {
+            $log_time      = Registry::timestampFactory()->fromString($record->log_time)->toDateTimeString();
+            $error_message = Str::limit(strip_tags($record->log_message), 256);
+            $msg->append(I18N::translate('On %s from %s: %s', $log_time, $record->ip_address, $error_message));
+        }
+
+        $msg->footer(I18N::plural('There was %s error in the last 24 hours', 'There were %s errors in the last 24 hours', count($records), I18N::number(count($records))));
+
+        return $msg;
+    }
+
 }

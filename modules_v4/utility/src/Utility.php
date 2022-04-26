@@ -238,7 +238,8 @@ class Utility extends AbstractModule implements ModuleCustomInterface, ModuleGlo
             'rename_media'         => I18N::translate('Rename media'),
             'user_activity'        => I18N::translate('Show user activity in the last 24 hours'),
             'reorder_media'        => I18N::translate('Sort Media like webtrees 1.7'),
-            'census_note_format'   => I18N::translate('Update census note format'),
+            //'census_note_format'   => I18N::translate('Update census note format'),
+            'list_errors'          => I18N::translate('Errors in the last 24 hours'),
         ];
     }
 
@@ -333,8 +334,11 @@ class Utility extends AbstractModule implements ModuleCustomInterface, ModuleGlo
                 case 'list_edits':
                     $msg = $functions->editActivity();
                     break;
-                case 'census_note_format':
-                    $msg = $functions->noteFormat();
+                // case 'census_note_format':
+                //     $msg = $functions->noteFormat();
+                //     break;
+                case 'list_errors':
+                    $msg = $functions->errors();
                     break;
                 default:
                     throw new HttpBadRequestException('Unknown function ' . $routine);
