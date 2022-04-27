@@ -24,6 +24,6 @@ namespace Ded\UtilityModule;
 
 use Fisharebest\Webtrees\Webtrees;
 
-require __DIR__ . '/src/Utility.php';
+require_once __DIR__ . '/src/Utility.php';
 
 return Webtrees::make(Utility::class);
