@@ -69,7 +69,8 @@ class BadBotBlocker implements MiddlewareInterface
         'AntBot', // Aggressive crawler
         'AspiegelBot',
         'Awario', // Brand management
-        'Barkrowler', // Crawler for babbar.tech
+        'Barkrowler',
+        'binance',
         'BLEXBot',
         'Bytespider', // Aggressive crawler from Bytedance/TikTok
         'CCBot', // Used to train a number of LLMs

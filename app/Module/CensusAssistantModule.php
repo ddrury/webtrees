@@ -172,11 +172,11 @@ class CensusAssistantModule extends AbstractModule
         $text = $ca_title;
 
         if ($ca_citation !== '') {
-            $text .= "\n" . $ca_citation;
+            $text .= "  \n" . $ca_citation;
         }
 
         if ($ca_place !== '') {
-            $text .= "\n" . $ca_place;
+            $text .= "  \n" . $ca_place;
         }
 
         $text .= "\n\n|";
