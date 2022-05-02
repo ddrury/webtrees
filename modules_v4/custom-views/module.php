@@ -39,8 +39,6 @@ return new class () extends AbstractModule implements ModuleCustomInterface, Mod
         View::registerCustomView('::modules/recent_changes/changes-list', $this->name() . '::modules/recent_changes/changes-list');
         // Remove username
         View::registerCustomView('::modules/user-messages/user-messages', $this->name() . '::modules/user-messages/user-messages');
-        // Fix column & table size
-        View::registerCustomView('::modules/personal_facts/tab', $this->name() . '::modules/personal_facts/tab');
     }
 
     /**
