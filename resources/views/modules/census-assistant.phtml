@@ -112,11 +112,11 @@ use Fisharebest\Webtrees\View;
     form.querySelector('.census-assistant-class').value = option.dataset.census;
 
     const censusAssistantLink = document.querySelector('.census-assistant-link');
-    const censusAssistant     = document.querySelector('#census-assistant');
-    const censusOption        = this.options[this.selectedIndex];
-    const census              = censusOption.dataset.wtCensus;
-    const censusPlace         = censusOption.dataset.wtPlace;
-    const censusYear          = censusOption.dataset.wtDate.substr(-4);
+    const censusAssistant = document.querySelector('#census-assistant');
+    const censusOption = this.options[this.selectedIndex];
+    const census = censusOption.dataset.wtCensus;
+    const censusPlace = censusOption.dataset.wtPlace;
+    const censusYear = censusOption.dataset.wtDate.substr(-4);
 
     if (censusOption.value !== '') {
       censusAssistantLink.removeAttribute('hidden');
@@ -134,11 +134,8 @@ use Fisharebest\Webtrees\View;
     formData.append('tree_id', '<?= $individual->tree()->id() ?>');
     formData.append('_csrf', document.querySelector('meta[name=csrf]').content);
 
-    fetch(<?= json_encode(route('module', ['module' => 'GEDFact_assistant', 'action' => 'CensusInitialize', 'tree' => $individual->tree()->name()]), JSON_THROW_ON_ERROR) ?>, {
-        credentials: 'same-origin',
-        body: formData,
-        method: 'POST',
-    })
+    const url = <?= json_encode(route('module', ['module' => 'GEDFact_assistant', 'action' => 'CensusInitialize', 'tree' => $individual->tree()->name()]), JSON_THROW_ON_ERROR) ?>;
+    webtrees.httpPost(url, formData)
     .then(response => response.text())
     .then((text) => {
         const data = JSON.parse(text);
@@ -160,10 +157,10 @@ use Fisharebest\Webtrees\View;
   }
 
   // Add the currently selected individual to the census
-  function censusAssistantAdd(caller) {
+  function censusAssistantAdd (caller) {
     const selector = document.querySelector('#census-assistant-' + caller);
-    const xref     = selector.options[selector.selectedIndex].value;
-    const rows     = Array.from(document.querySelectorAll('#census-assistant-table tbody tr td:first-child input')).map(input => input.value);
+    const xref = selector.options[selector.selectedIndex].value;
+    const rows = Array.from(document.querySelectorAll('#census-assistant-table tbody tr td:first-child input')).map(input => input.value);
 
     // Is the selected individual already in the census?
     if (xref !== '' && rows.includes(xref)) {
@@ -173,20 +170,17 @@ use Fisharebest\Webtrees\View;
     }
 
     const censusSelector = document.querySelector('.census-selector');
-    const census         = censusSelector.options[censusSelector.selectedIndex].dataset.wtCensus;
-    const headInput      = document.querySelector('#census-assistant-table td input');
-    const head           = headInput === null ? xref : headInput.value;
-    const formData       = new FormData();
+    const census = censusSelector.options[censusSelector.selectedIndex].dataset.wtCensus;
+    const headInput = document.querySelector('#census-assistant-table td input');
+    const head = headInput === null ? xref : headInput.value;
+    const formData = new FormData();
     formData.append('census', census);
     formData.append('_csrf', document.querySelector('meta[name=csrf]').content);
     formData.append('head', head);
     formData.append('xref', xref);
 
-    fetch(<?= json_encode(route('module', ['module' => 'GEDFact_assistant', 'action' => 'CensusIndividual', 'tree' => $individual->tree()->name()]), JSON_THROW_ON_ERROR) ?>, {
-      credentials: 'same-origin',
-      body: formData,
-      method: 'POST'
-    })
+    const url = <?= json_encode(route('module', ['module' => 'GEDFact_assistant', 'action' => 'CensusIndividual', 'tree' => $individual->tree()->name()]), JSON_THROW_ON_ERROR) ?>;
+    webtrees.httpPost(url, formData)
       .then(response => response.text())
       .then(function (text) {
         document.querySelector('#census-assistant-table tbody').insertAdjacentHTML('beforeend', text);

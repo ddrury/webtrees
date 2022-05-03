@@ -23,6 +23,7 @@ use Fisharebest\Webtrees\DB;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Media;
+use Fisharebest\Webtrees\MediaFile;
 use Fisharebest\Webtrees\Mime;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\DatatablesService;
@@ -115,40 +116,15 @@ class ManageMediaData implements RequestHandlerInterface
             $media = Registry::mediaFactory()->make($row->m_id, $tree, $row->m_gedcom);
             assert($media instanceof Media);
 
-            $is_http  = str_starts_with($row->multimedia_file_refn, 'http://');
-            $is_https = str_starts_with($row->multimedia_file_refn, 'https://');
+            $mediaFiles = $media->mediaFiles();
+            $img        = view('icons/mime', ['type' => Mime::DEFAULT_TYPE]);
 
-            if ($is_http || $is_https) {
-                return [
-                    '<a href="' . e($row->multimedia_file_refn) . '">' . e($row->multimedia_file_refn) . '</a>',
-                    view('icons/mime', ['type' => Mime::DEFAULT_TYPE]),
-                    $this->mediaObjectInfo($media),
-                ];
-            }
-
-            try {
-                $path = $row->media_folder . $row->multimedia_file_refn;
-
-                try {
-                    $mime_type = Registry::filesystem()->data()->mimeType($path);
-                } catch (UnableToRetrieveMetadata $ex) {
-                    $mime_type = Mime::DEFAULT_TYPE;
+            foreach ($mediaFiles as $mediaFile) {
+                if ($mediaFile->filename() === $row->multimedia_file_refn) {
+                    $img = $mediaFile->displayImage(120, 90, 'contain');
+                    break;
                 }
-
-                if (str_starts_with($mime_type, 'image/')) {
-                    $url = route(AdminMediaFileThumbnail::class, ['path' => $path]);
-                    $img = '<img src="' . e($url) . '">';
-                } else {
-                    $img = view('icons/mime', ['type' => $mime_type]);
-                }
-
-                $url = route(AdminMediaFileDownload::class, ['path' => $path]);
-                $img = '<a href="' . e($url) . '" type="' . $mime_type . '" class="media">' . $img . '</a>';
-            } catch (UnableToReadFile $ex) {
-                $url = route(AdminMediaFileThumbnail::class, ['path' => $path]);
-                $img = '<img src="' . e($url) . '">';
             }
-
             return [
                 e($row->multimedia_file_refn),
                 $img,
