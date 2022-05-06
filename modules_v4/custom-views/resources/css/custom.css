@@ -73,6 +73,7 @@
 
 #welcome-card .float-start {
     padding-inline-end: 1rem;
+    max-width:20%;
 }
 
 #welcome-card .img-fluid {
