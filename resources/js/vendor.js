@@ -73,7 +73,6 @@ import 'hideshowpassword';
 
 import 'moment';
 
-import 'jquery-colorbox';
 import 'pinch-zoom-element';
 
 import 'leaflet';
