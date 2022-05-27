@@ -147,7 +147,7 @@ class NoteStructure extends SubmitterText
         $html  = $this->valueFormatted($value, $tree);
 
         // Inline note with only one paragraph and inline markup?
-        if ($html === strip_tags($html, ['a', 'em', 'p', 'strong']) && substr_count($html, '<p>') === 1) {
+        if ($html === strip_tags($html, ['a', 'em', 'p', 'strong']) && substr_count($html, '<p>') === 1 && strlen(strip_tags($html)) <= 100) {
             $html  = strip_tags($html, ['a', 'em', 'strong']);
             $value = '<span class="ut">' . $html . '</span>';
 

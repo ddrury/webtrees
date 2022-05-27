@@ -624,7 +624,7 @@ class Functions
         $records = DB::table('log')
             ->select('log_time', 'log_message', 'ip_address')
             ->where('log_type', '=', 'error')
-            ->where('log_time', '>', Registry::timestampFactory()->now()->subtractDays(1)->toDateTimeString())
+            ->where('log_time', '>=', Registry::timestampFactory()->now()->subtractDays(1)->toDateTimeString())
             ->orderBy('log_time', 'desc')
             ->get();
 
