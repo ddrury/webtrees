@@ -71,7 +71,7 @@ class MarkdownFactory implements MarkdownFactoryInterface
                 'enabled'    => true,
                 'tag'        => 'div',
                 'attributes' => [
-                    'class' => 'table-responsive',
+                    'class' => 'table-responsive markdown',
                 ],
             ],
         ],
