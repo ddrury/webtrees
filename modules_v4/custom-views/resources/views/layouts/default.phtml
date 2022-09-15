@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\Http\RequestHandlers\AppleTouchIconPng;
@@ -12,6 +14,7 @@ use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleThemeInterface;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\View;
 use Fisharebest\Webtrees\Webtrees;
 use Psr\Http\Message\ServerRequestInterface;
@@ -27,75 +30,75 @@ use Psr\Http\Message\ServerRequestInterface;
 
 <!DOCTYPE html>
 <html dir="<?= I18N::locale()->direction() ?>" lang="<?= I18N::locale()->languageTag() ?>">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="csrf" content="<?= e(csrf_token()) ?>">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="robots" content="<?= e($meta_robots ?? 'noindex') ?>">
-        <meta name="generator" content="<?= e(Webtrees::NAME) ?> <?= e(Webtrees::VERSION) ?>">
-        <meta name="description" content="<?= $meta_description ?? '' ?>">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="csrf" content="<?= e(csrf_token()) ?>">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="robots" content="<?= e($meta_robots ?? 'noindex') ?>">
+      <meta name="generator" content="<?= e(Webtrees::NAME) ?> <?= e(Webtrees::VERSION) ?>">
+      <meta name="description" content="<?= $meta_description ?? '' ?>">
 
-        <title>
-            <?= strip_tags($title) ?>
-            <?php if ($tree !== null && $tree->getPreference('META_TITLE') !== '') : ?>
-                – <?= e($tree->getPreference('META_TITLE')) ?>
-            <?php endif ?>
-        </title>
+      <title>
+          <?= strip_tags($title) ?>
+          <?php if ($tree !== null && $tree->getPreference('META_TITLE') !== '') : ?>
+              – <?= e($tree->getPreference('META_TITLE')) ?>
+          <?php endif ?>
+      </title>
 
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-        <link rel="icon" type="image/png" href="/favicon.png">
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+      <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+      <link rel="icon" type="image/png" href="/favicon.png">
+      <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
-        <link rel="manifest" href="<?= e(route(WebmanifestJson::class)) ?>" crossorigin="use-credentials">
+      <link rel="manifest" href="<?= e(route(WebmanifestJson::class)) ?>" crossorigin="use-credentials">
 
-        <link rel="stylesheet" href="<?= e(asset('css/vendor.min.css')) ?>">
-        <?php foreach (app(ModuleThemeInterface::class)->stylesheets() as $stylesheet) : ?>
-            <link rel="stylesheet" href="<?= e($stylesheet) ?>">
-        <?php endforeach ?>
+      <link rel="stylesheet" href="<?= e(asset('css/vendor.min.css')) ?>">
+      <?php foreach (app(ModuleThemeInterface::class)->stylesheets() as $stylesheet) : ?>
+          <link rel="stylesheet" href="<?= e($stylesheet) ?>">
+      <?php endforeach ?>
 
-        <?= View::stack('styles') ?>
+      <?= View::stack('styles') ?>
 
-        <?= app(ModuleService::class)->findByInterface(ModuleGlobalInterface::class)->map(static function (ModuleGlobalInterface $module): string {
-            return $module->headContent();
-        })->implode('') ?>
-    </head>
+      <?= app(ModuleService::class)->findByInterface(ModuleGlobalInterface::class)->map(static function (ModuleGlobalInterface $module): string {
+          return $module->headContent();
+      })->implode('') ?>
+  </head>
 
-    <body class="wt-global wt-theme-<?= e(app(ModuleThemeInterface::class)->name()) ?> wt-route-<?= e(substr(strrchr($request->getAttribute('route')->name ?? 'no-route', '\\'),1)) ?>">
-        <header class="wt-header-wrapper d-print-none">
-            <div class="container-lg wt-header-container">
-                <div class="row wt-header-content">
-                    <div class="wt-accessibility-links position-fixed">
-                        <a class="visually-hidden visually-hidden-focusable btn btn-info btn-sm" href="#content">
-                            <?= /* I18N: Skip over the headers and menus, to the main content of the page */
-                            I18N::translate('Skip to content') ?>
-                        </a>
-                    </div>
-                    <div class="col wt-site-logo"></div>
+    <body class="wt-global wt-theme-<?= e(app(ModuleThemeInterface::class)->name()) ?> wt-route-<?= e(basename(strtr(Validator::attributes($request)->route()->name ?? '/', ['\\' => '/']))) ?>">
+      <header class="wt-header-wrapper d-print-none">
+        <div class="container-lg wt-header-container">
+            <div class="row wt-header-content">
+                <div class="wt-accessibility-links position-fixed">
+                    <a class="visually-hidden visually-hidden-focusable btn btn-info btn-sm" href="#content">
+                        <?= /* I18N: Skip over the headers and menus, to the main content of the page */
+                        I18N::translate('Skip to content') ?>
+                    </a>
+                </div>
+                <div class="col wt-site-logo"></div>
 
-                    <?php if ($tree !== null) : ?>
-                        <h1 class="col wt-site-title"><?= e($tree->title()) ?></h1>
-                    <?php endif ?>
+                <?php if ($tree !== null) : ?>
+                    <h1 class="col wt-site-title"><?= e($tree->title()) ?></h1>
+                <?php endif ?>
 
-                    <div class="col wt-secondary-navigation">
-                        <ul class="nav wt-user-menu">
-                            <?php foreach (app(ModuleThemeInterface::class)->userMenu($tree) as $menu) : ?>
+                <div class="col wt-secondary-navigation">
+                    <ul class="nav wt-user-menu">
+                        <?php foreach (app(ModuleThemeInterface::class)->userMenu($tree) as $menu) : ?>
+                            <?= view('components/menu-item', ['menu' => $menu]) ?>
+                        <?php endforeach ?>
+                    </ul>
+                </div>
+
+                <?php if ($tree !== null) : ?>
+                    <nav class="col wt-primary-navigation">
+                        <ul class="nav wt-genealogy-menu">
+                            <?php foreach (app(ModuleThemeInterface::class)->genealogyMenu($tree) as $menu) : ?>
                                 <?= view('components/menu-item', ['menu' => $menu]) ?>
                             <?php endforeach ?>
                         </ul>
-                    </div>
-
-                    <?php if ($tree !== null) : ?>
-                        <nav class="col wt-primary-navigation">
-                            <ul class="nav wt-genealogy-menu">
-                                <?php foreach (app(ModuleThemeInterface::class)->genealogyMenu($tree) as $menu) : ?>
-                                    <?= view('components/menu-item', ['menu' => $menu]) ?>
-                                <?php endforeach ?>
-                            </ul>
-                        </nav>
-                    <?php endif ?>
-                </div>
+                    </nav>
+                <?php endif ?>
             </div>
-        </header>
+        </div>
+      </header>
 
         <main id="content" class="wt-main-wrapper">
             <div class="container-lg wt-main-container">
