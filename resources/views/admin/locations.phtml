@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 use Fisharebest\Webtrees\Http\RequestHandlers\MapDataAdd;
 use Fisharebest\Webtrees\Http\RequestHandlers\MapDataDelete;
 use Fisharebest\Webtrees\Http\RequestHandlers\MapDataDeleteUnused;
@@ -102,7 +100,7 @@ use Illuminate\Support\Collection;
             <td>
                 <?php if ($list_module !== null && array_key_exists($place->key, $active)) : ?>
                     <?php if (count($active[$place->key]) === 1) : ?>
-                        <a class="btn btn-link" href="<?= e($list_module->listUrl($all_trees->get($active[$place->key][0]->tree_name), ['place_id' => $active[$place->key][0]->p_id, 'action2' => 'hierarchy-e'])) ?>">
+                        <a class="btn btn-link" href="<?= e($list_module->listUrl($all_trees->get($active[$place->key][0]->tree_name), ['place_id' => $active[$place->key][0]->p_id])) ?>">
                             <?= e($active[$place->key][0]->tree_title) ?>
                         </a>
                     <?php else : ?>
@@ -169,6 +167,7 @@ use Illuminate\Support\Collection;
             <td colspan="2">
                 <?php if (count($active) !== count($placelist)) : ?>
                     <form class="d-inline" method="post" action="<?= route(MapDataDeleteUnused::class) ?>">
+                        <?= csrf_field() ?>
                         <button type="submit" class="btn btn-danger">
                             <?= view('icons/delete') ?>
                             <?= I18N::translate('Delete unused locations') ?>
