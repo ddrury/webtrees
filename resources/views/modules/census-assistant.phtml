@@ -131,7 +131,6 @@ use Fisharebest\Webtrees\View;
     let formData = new FormData();
     formData.append('census', census);
     formData.append('xref', '<?= $individual->xref() ?>');
-    formData.append('tree_id', '<?= $individual->tree()->id() ?>');
     formData.append('_csrf', document.querySelector('meta[name=csrf]').content);
 
     const url = <?= json_encode(route('module', ['module' => 'GEDFact_assistant', 'action' => 'CensusInitialize', 'tree' => $individual->tree()->name()]), JSON_THROW_ON_ERROR) ?>;

@@ -11,17 +11,9 @@ use Fisharebest\Webtrees\I18N;
 
 ?>
 
-<<<<<<< HEAD
-<div class="py-4">
-    <div class="row gchart wt-places-tab-wrapper wt-fullscreen-container">
-        <div id="wt-map" class="col-sm-9 wt-ajax-load wt-map" dir="ltr"></div>
-        <ul class="col-sm-3 wt-map-sidebar wt-page-options-value list-unstyled px-md-1"></ul>
-    </div>
-=======
-<div class="row gchart wt-places-tab-wrapper">
-  <div id="wt-map" class="col-sm-9 wt-ajax-load wt-map wt-places-tab-map" dir="ltr"></div>
-  <ul class="col-sm-3 wt-places-tab-sidebar wt-page-options-value list-unstyled px-md-1"></ul>
->>>>>>> 2aeebaae8b (places tab remove option to hide sidebar)
+<div class="row gchart wt-places-tab-wrapper wt-fullscreen-container">
+  <div id="wt-map" class="col-sm-9 wt-ajax-load wt-map" dir="ltr"></div>
+  <ul class="col-sm-3 wt-sidebar wt-page-options-value list-unstyled px-md-1"></ul>
 </div>
 
 <script>
@@ -38,6 +30,9 @@ use Fisharebest\Webtrees\I18N;
       block: "nearest",
       inline: "start"
     };
+
+    const popupZoomLevel = 12; // 12 is a reasonable compromise for open clusters
+    const spiderfyDelay = 300; // mS
 
     // Map components
     let markers = L.markerClusterGroup({
@@ -121,29 +116,23 @@ use Fisharebest\Webtrees\I18N;
           const mkrLayer = markers.getLayers().filter(function (v) {
             return v.feature !== undefined && v.feature.id === eventId;
           });
+          const mkr = mkrLayer.pop();
 
-          let mkr = mkrLayer.pop();
+          if (mkr instanceof L.Layer) {
+            map
+            .flyTo(mkr.getLatLng(), popupZoomLevel, {duration: 0.75})
+            .once('moveend', () => {
+                webtrees.leafletJsSpiderfyClusters(markers, mkr, spiderfyDelay);
+            });
+          } else {
+            // Should never get here
+            console.log('Error: unable to find the selected marker');
+          }
 
-<<<<<<< HEAD
-          markers.zoomToShowLayer(mkr, function (e) {
-            mkr.openPopup();
-          });
-        });
-
-        // stop click on a person also opening the popup
-        element.querySelectorAll('a').forEach((el) => {
-          el.addEventListener('click', (e) => {
-            e.stopPropagation();
-          });
-        });
-      });
-    };
-=======
           return false;
         }
       });
     }
->>>>>>> 2aeebaae8b (places tab remove option to hide sidebar)
 
     _drawMap();
     _buildMapData();

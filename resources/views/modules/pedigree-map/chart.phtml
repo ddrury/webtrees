@@ -11,6 +11,11 @@ use Fisharebest\Webtrees\View;
  */
 ?>
 
+<label class="form-check-label mb-2">
+  <input class="wt-sidebar-toggle" type="checkbox" data-wt-persist="pedigree-map" autocomplete="off"></input>
+  <?= I18N::translate('Hide the list of events') ?>
+</label>
+
 <div class="row my-4 gchart wt-pedigree-map-wrapper wt-fullscreen-container">
     <div id="wt-map" class="col-sm-9 wt-ajax-load wt-map" dir="ltr"></div>
     <ul class="col-sm-3 wt-map-sidebar wt-page-options-value list-unstyled px-1 mb-0"></ul>
