@@ -67,19 +67,6 @@
     font-size: .9rem;
 }
 
-#welcome-card .semi-bold {
-    font-weight: 600;
-}
-
-#welcome-card .float-start {
-    padding-inline-end: 1rem;
-    max-width:20%;
-}
-
-#welcome-card .img-fluid {
-    pointer-events: none;
-}
-
 .dropdown-menu {
     min-width: 14rem;
 }

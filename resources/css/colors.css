@@ -16,9 +16,9 @@
 /* The colors theme is based on the clouds theme */
 @import "clouds.css";
 
-:root {
+/* :root {
     --link-color: #333;
-}
+} */
 
 /* Override Bootstrap formatting */
 
