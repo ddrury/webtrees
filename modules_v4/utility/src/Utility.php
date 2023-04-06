@@ -203,7 +203,7 @@ class Utility extends AbstractModule implements ModuleCustomInterface, ModuleGlo
      * @param ServerRequestInterface $request
      * @return ResponseInterface
      */
-    public function getAssetAction(ServerRequestInterface $request): ResponseInterface
+    public function getAssetAction(): ResponseInterface
     {
         return response('No Content', StatusCodeInterface::STATUS_NO_CONTENT);
     }

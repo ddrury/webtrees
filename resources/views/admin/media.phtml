@@ -24,7 +24,7 @@ use Illuminate\Support\Collection;
 
 <h1><?= $title ?></h1>
 
-<form method="post" action="<?= e(route(ManageMediaAction::class)) ?>" id="admin-media-form">
+<form method="post" action="<?= e(route(ManageMediaAction::class)) ?>" id="admin-media-form" class="mb-5">
     <table class="table table-bordered table-sm">
         <thead>
             <tr>
@@ -85,31 +85,32 @@ use Illuminate\Support\Collection;
 
     <?= csrf_field() ?>
 </form>
-<br>
-<br>
 
-<table
-    class="table table-bordered table-sm datatables d-none"
-    <?= view('lists/datatables-attributes') ?>
-    data-ajax="<?= e(route(ManageMediaData::class, ['files' => $files, 'media_folder' => $media_folder, 'subfolders' => $subfolders])) ?>"
-    data-server-side="true"
->
-    <thead>
-        <tr>
-            <th>
-                <?= I18N::translate('Media file') ?>
-            </th>
+<div class="mb-4">
+  <table
+      class="table table-bordered table-sm datatables d-none"
+      <?= view('lists/datatables-attributes') ?>
+      data-ajax="<?= e(route(ManageMediaData::class, ['files' => $files, 'media_folder' => $media_folder, 'subfolders' => $subfolders])) ?>"
+      data-server-side="true"
+  >
+      <thead>
+          <tr>
+              <th>
+                  <?= I18N::translate('Media file') ?>
+              </th>
 
-            <th data-sortable="false">
-                <?= I18N::translate('Media') ?>
-            </th>
+              <th data-sortable="false">
+                  <?= I18N::translate('Media') ?>
+              </th>
 
-            <th data-sortable="<?= $files === 'unused' ? 'false' : 'true' ?>">
-                <?= I18N::translate('Media object') ?>
-            </th>
-        </tr>
-    </thead>
-</table>
+              <th data-sortable="<?= $files === 'unused' ? 'false' : 'true' ?>">
+                  <?= I18N::translate('Media object') ?>
+              </th>
+          </tr>
+      </thead>
+  </table>
+</div>
+
 <?= view('modals/create-media-from-file', ['media_types' => $media_types]) ?>
 
 <?php View::push('javascript') ?>

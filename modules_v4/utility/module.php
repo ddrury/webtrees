@@ -22,8 +22,8 @@ namespace Ded\UtilityModule;
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 // Module developed by David Drury
 
-use Fisharebest\Webtrees\Webtrees;
+use Fisharebest\Webtrees\Registry;
 
 require_once __DIR__ . '/src/Utility.php';
 
-return Webtrees::make(Utility::class);
+return Registry::container()->get(Utility::class);

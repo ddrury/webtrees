@@ -116,11 +116,11 @@ class Functions
     {
         $this->options          = $options;
         /** @var TreeService $tree_service */
-        $tree_service     = app(TreeService::class);
+        $tree_service     = Registry::container()->get(TreeService::class);
         /** @var MapDataService $map_data_service */
-        $map_data_service = app(MapDataService::class);
+        $map_data_service = Registry::container()->get(MapDataService::class);
         /** @var UserService $user_service */
-        $user_service     = app(UserService::class);
+        $user_service     = Registry::container()->get(UserService::class);
         $this->tree_service     = $tree_service;
         $this->map_data_service = $map_data_service;
         $this->user_service     = $user_service;
@@ -352,9 +352,11 @@ class Functions
             Site::getPreference('INDEX_DIRECTORY') .
             $tree->getPreference('MEDIA_DIRECTORY') .
             $row->multimedia_file_refn; // filenames with full path
+        $new_filename = null;
         $duplicate    = array_key_exists($row->multimedia_file_refn, $this->mapping);
 
-        if (!$duplicate && !$media_file->fileExists($this->data_filesystem)) { // If not duplicate but old file doesn't exist then can't rename
+        if (!$duplicate && !$media_file->fileExists()) {
+            // If not duplicate but old file doesn't exist then can't rename
             return false;
         } elseif ($duplicate) {
             // if this filename has already been found in another media object
@@ -378,7 +380,8 @@ class Functions
 
             $bestdate = date('Ymd', $dt ? $dt : filemtime($old_filename));
             assert($bestdate !== false);
-            if (!array_key_exists($bestdate, $this->seqNo)) {   // are there other files with this date ?
+            if (!array_key_exists($bestdate, $this->seqNo)) {
+                // are there other files with this date ?
                 $this->seqNo[$bestdate] = 0;
             }
             $parts        = pathinfo($row->multimedia_file_refn);
@@ -390,7 +393,7 @@ class Functions
         }
 
         $result = true;
-        if (!$duplicate) {
+        if (!$duplicate && $new_filename !== null) {
             $result = rename($old_filename, $new_filename);
         }
         if ($result) {

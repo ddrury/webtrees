@@ -49,7 +49,7 @@ class Message
     public function __construct(string $title = '')
     {
         /** @var ModuleService $module_service */
-        $module_service = app(ModuleService::class);
+        $module_service = Registry::container()->get(ModuleService::class);
         $module         = $module_service->findByName('_utility_');
         assert($module instanceof ModuleCustomInterface);
         $this->module = $module;

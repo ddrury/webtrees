@@ -293,7 +293,7 @@ class CensusAssistantModule extends AbstractModule
         if (!$individual instanceof Individual) {
             return $options;
         }
-        $relationship_service = app(RelationshipService::class);
+        $relationship_service = Registry::container()->get(RelationshipService::class);
         assert($relationship_service instanceof RelationshipService);
 
         $max_age     = (int) $individual->tree()->getPreference('MAX_ALIVE_AGE');
