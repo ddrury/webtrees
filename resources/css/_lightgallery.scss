@@ -1,0 +1,45 @@
+ /*  lightgallery.js
+    Over-ride some default sass variables & styles
+    Initially tried to place the font files in resources/fonts
+    but the recommended server configuration bars access
+    to urls, so put them in public/css/fonts instead
+*/
+$lg-path-fonts   : 'fonts'!default;
+$lg-path-images  : 'images'!default;
+$backdrop-opacity: 0.7 !default;
+$lg-thumb-bg: #827f7f!default;
+
+@import '../../node_modules/lightgallery/scss/lg-variables';
+@import '../../node_modules/lightgallery/scss/lg-mixins';
+@import '../../node_modules/lightgallery/scss/lg-fonts';
+@import '../../node_modules/lightgallery/scss/lg-theme-default';
+@import '../../node_modules/lightgallery/scss/lg-thumbnail';
+@import '../../node_modules/lightgallery/scss/lg-autoplay';
+@import '../../node_modules/lightgallery/scss/lg-zoom';
+@import '../../node_modules/lightgallery/scss/lg-fullscreen';
+@import '../../node_modules/lightgallery/scss/lightgallery-core';
+@import '../../node_modules/lightgallery/scss/lg-transitions';
+@import '../../node_modules/lightgallery/scss/lg-rotate';
+
+.lg-thumb-item {
+   border-radius: 8px!important;
+   border-width: 3px!important;
+   &:hover {
+    border-color: #ffffb3!important;
+   }
+   &.active {
+       border-color: #ffff00!important;
+   }
+   img {
+       object-fit: contain!important;
+   }
+}
+
+.lg-image {
+    border: 5px ridge black!important;
+}
+
+.lg-toolbar {
+    background: rgb(69,69,69)!important;
+    background: linear-gradient(0deg, rgba(69,69,69,1) 10%, rgba(0,0,0,1) 50%, rgba(69,69,69,1) 90%)!important;
+}
