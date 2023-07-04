@@ -49,6 +49,7 @@ class SitePreferencesAction implements RequestHandlerInterface
         $language            = Validator::parsedBody($request)->string('LANGUAGE');
         $theme_dir           = Validator::parsedBody($request)->string('THEME_DIR');
         $timezone            = Validator::parsedBody($request)->string('TIMEZONE');
+        $tab_filter          = Validator::parsedBody($request)->string('FILTER_BY_TAB');
 
         if (!str_ends_with($index_directory, '/')) {
             $index_directory .= '/';
@@ -68,6 +69,7 @@ class SitePreferencesAction implements RequestHandlerInterface
         Site::setPreference('LANGUAGE', $language);
         Site::setPreference('THEME_DIR', $theme_dir);
         Site::setPreference('TIMEZONE', $timezone);
+        Site::setPreference('FILTER_BY_TAB', $tab_filter);
 
         FlashMessages::addMessage(I18N::translate('The website preferences have been updated.'), 'success');
         $url = route(ControlPanel::class);

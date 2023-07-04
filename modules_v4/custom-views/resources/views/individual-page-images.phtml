@@ -34,7 +34,11 @@ use Illuminate\Support\Collection;
                 <i class="wt-individual-silhouette wt-individual-silhouette-<?= strtolower($record->sex()) ?>"></i>
             </div>
         <?php else : ?>
-            <?= $individual_media->first()->displayImage(200, 260, 'crop', ['class' => 'img-thumbnail img-fluid w-100']) ?>
+          <div id="individual-images">
+            <div class="active">
+                <?= $individual_media->first()->displayImage(200, 260, 'crop', ['class' => 'img-thumbnail img-fluid w-100']) ?>
+            </div>
+          </div>
         <?php endif ?>
 
         <?php if (Auth::isEditor($record->tree())) : ?>

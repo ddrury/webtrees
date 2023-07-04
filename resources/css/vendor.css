@@ -24,6 +24,5 @@
 @import "../../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css";
 @import "../../node_modules/leaflet.markercluster/dist/MarkerCluster.css";
 @import "../../node_modules/leaflet.control.layers.tree/L.Control.Layers.Tree.css";
-@import "../../node_modules/spotlight.js/dist/css/spotlight.min.css";
 
 @import "_vendor-patches.css";

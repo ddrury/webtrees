@@ -107,6 +107,21 @@ use Fisharebest\Webtrees\Site;
         </div>
     </fieldset>
 
+    <!-- ALLOW_FILTER_MEDIA_BY_TAB -->
+    <fieldset class="row mb-3">
+        <legend class="col-form-label col-sm-3">
+            <?= /* I18N: A configuration setting */
+            I18N::translate('Restrict media to current tab') ?>
+        </legend>
+        <div class="col-sm-9">
+            <?= view('components/radios-inline', ['name' => 'FILTER_BY_TAB', 'options' => [I18N::translate('no'), I18N::translate('yes')], 'selected' => (int) Site::getPreference('FILTER_BY_TAB')]) ?>
+            <div class="form-text">
+                <?= /* I18N: Help text for the “Restrict media to current tab” site configuration setting */
+                I18N::translate('When displaying media in the lightbox, for the Individual page only show media from the current tab') ?>
+            </div>
+        </div>
+    </fieldset>
+
     <div class="row mb-3">
         <div class="offset-sm-3 col-sm-9">
             <button type="submit" class="btn btn-primary">

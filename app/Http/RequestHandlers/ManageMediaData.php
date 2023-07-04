@@ -20,10 +20,10 @@ declare(strict_types=1);
 namespace Fisharebest\Webtrees\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\DB;
+use Fisharebest\Webtrees\Html;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Media;
-use Fisharebest\Webtrees\MediaFile;
 use Fisharebest\Webtrees\Mime;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\DatatablesService;
@@ -34,6 +34,7 @@ use Fisharebest\Webtrees\Validator;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Support\Str;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\UnableToCheckFileExistence;
@@ -116,15 +117,48 @@ class ManageMediaData implements RequestHandlerInterface
             $media = Registry::mediaFactory()->make($row->m_id, $tree, $row->m_gedcom);
             assert($media instanceof Media);
 
-            $mediaFiles = $media->mediaFiles();
-            $img        = view('icons/mime', ['type' => Mime::DEFAULT_TYPE]);
+            $is_http  = str_starts_with($row->multimedia_file_refn, 'http://');
+            $is_https = str_starts_with($row->multimedia_file_refn, 'https://');
 
-            foreach ($mediaFiles as $mediaFile) {
-                if ($mediaFile->filename() === $row->multimedia_file_refn) {
-                    $img = $mediaFile->displayImage(120, 90, 'contain');
-                    break;
-                }
+            if ($is_http || $is_https) {
+                return [
+                    '<a href="' . e($row->multimedia_file_refn) . '">' . e($row->multimedia_file_refn) . '</a>',
+                    view('icons/mime', ['type' => Mime::DEFAULT_TYPE]),
+                    $this->mediaObjectInfo($media),
+                ];
             }
+
+            try {
+                $path = $row->media_folder . $row->multimedia_file_refn;
+
+                try {
+                    $mime_type = Registry::filesystem()->data()->mimeType($path);
+                } catch (UnableToRetrieveMetadata) {
+                    $mime_type = Mime::DEFAULT_TYPE;
+                }
+
+                if (str_starts_with($mime_type, 'image/')) {
+                    $url = route(AdminMediaFileThumbnail::class, ['path' => $path]);
+                    $img = '<img alt="' . strip_tags($media->fullName()) . '" src="' . e($url) . '">';
+                } else {
+                    $img = view('icons/mime', ['type' => $mime_type]);
+                }
+
+                $url = route(AdminMediaFileDownload::class, ['path' => $path]);
+                $link_attributes = Html::attributes([
+                    'class'          => 'gallery',
+                    'type'           => $mime_type,
+                    'href'           => e($url),
+                    'data-id'        => $media->xref(),
+                    'data-note'      => Str::limit(Registry::markdownFactory()->markdown($media->getNote()), 160, I18N::translate('…')),
+                    'data-download'  => json_encode(true),
+                ]);
+                $img = '<a ' . $link_attributes . '>' . $img . '</a>';
+            } catch (UnableToReadFile) {
+                $url = route(AdminMediaFileThumbnail::class, ['path' => $path]);
+                $img = '<img src="' . e($url) . '">';
+            }
+
             return [
                 e($row->multimedia_file_refn),
                 $img,
@@ -216,7 +250,7 @@ class ManageMediaData implements RequestHandlerInterface
                     }
 
                     $url = route(AdminMediaFileDownload::class, ['path' => $row[0]]);
-                    $img = '<a href="' . e($url) . '">' . $img . '</a>';
+                    $img = '<a class="gallery" href="' . e($url) . '">' . $img . '</a>';
 
                     // Form to create new media object in each tree
                     $create_form = '';

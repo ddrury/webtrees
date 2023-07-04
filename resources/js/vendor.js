@@ -43,14 +43,14 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 import {
   // For resources/views/icons/*
-  faAngleLeft, faAnglesLeft, faAngleRight, faAnglesRight, faArrowDown, faArrowLeft, faArrowRight,
-  faArrowUp, faArrowsAltV, faBan, faBars, faCalendar, faCaretDown, faCaretUp, faCheck, faCodeBranch,
-  faCompress, faDatabase, faDownload, faExclamationTriangle, faExpand, faGenderless, faGripHorizontal, faGripLines,
-  faHistory, faInfoCircle, faLanguage, faLink, faList, faLock, faMagic, faMap, faMapMarkerAlt,
-  faMars, faMedkit, faPaintBrush, faPause, faPencilAlt, faPlay, faPlus, faPuzzlePiece, faQuestionCircle,
-  faRedo, faSearch, faSearchLocation, faSearchMinus, faSearchPlus, faServer, faShareAlt, faSitemap, faSortAmountDown,
-  faStepForward, faStop, faSyncAlt, faTags, faThList, faThumbtack, faTimes, faTransgender, faTree,
-  faUndo, faUniversity, faUnlink, faUpload, faUsers, faVenus, faWrench,
+  faArrowDown, faArrowLeft, faArrowRight, faArrowUp, faArrowsAltV, faBan, faBars, faCalendar,
+  faCaretDown, faCaretUp, faCheck, faCodeBranch, faCompress, faDatabase, faDownload, faExclamationTriangle,
+  faExpand, faGenderless, faGripHorizontal, faGripLines, faHistory, faInfoCircle, faLanguage,
+  faLink, faList, faLock, faMagic, faMap, faMapMarkerAlt, faMars, faMedkit, faPaintBrush, faPause,
+  faPencilAlt, faPlay, faPlus, faPuzzlePiece, faQuestionCircle, faRedo, faSearch, faSearchLocation,
+  faSearchMinus, faSearchPlus, faServer, faShareAlt, faSitemap, faSortAmountDown, faStepForward, faStop,
+  faSyncAlt, faTags, faThList, faThumbtack, faTimes, faTransgender, faTree, faUndo, faUniversity,
+  faUnlink, faUpload, faUsers, faVenus, faWrench,
   // For the BeautifyMarker library
   faBabyCarriage, faBullseye, faHome, faIndustry, faInfinity, faStarOfDavid, faWater
 } from '@fortawesome/free-solid-svg-icons';
@@ -73,8 +73,6 @@ import 'hideshowpassword';
 
 import 'moment';
 
-import 'pinch-zoom-element';
-
 import 'leaflet';
 import 'leaflet.markercluster';
 import 'beautifymarker';
@@ -82,8 +80,12 @@ import 'leaflet-control-geocoder';
 import 'leaflet.control.layers.tree';
 import 'leaflet-bing-layer';
 
-// import 'spotlight' imports the bundle including css into the same file
-window.Spotlight = require('spotlight.js/src/js/spotlight.js');
+window.lightGallery = require('lightgallery/lightgallery.umd.js');
+window.lgZoom = require('lightgallery/plugins/zoom/lg-zoom.umd.js');
+window.lgThumbnail = require('lightgallery/plugins/thumbnail/lg-thumbnail.umd.js');
+window.lgFullscreen = require('lightgallery/plugins/fullscreen/lg-fullscreen.umd.js');
+window.lgAutoplay = require('lightgallery/plugins/autoplay/lg-autoplay.umd.js');
+window.lgRotate = require('lightgallery/plugins/rotate/lg-rotate.umd.js');
 
 window.$ = window.jQuery = $;
 
@@ -94,14 +96,14 @@ library.add(
 );
 library.add(
   // For resources/views/icons/*
-  faAngleLeft, faAnglesLeft, faAngleRight, faAnglesRight, faArrowDown, faArrowLeft, faArrowRight,
-  faArrowUp, faArrowsAltV, faBan, faBars, faCalendar, faCaretDown, faCaretUp, faCheck, faCodeBranch,
-  faCompress, faDatabase, faDownload, faExclamationTriangle, faExpand, faGenderless, faGripHorizontal, faGripLines,
-  faHistory, faInfoCircle, faLanguage, faLink, faList, faLock, faMagic, faMap, faMapMarkerAlt, faMars,
-  faMedkit, faPaintBrush, faPause, faPencilAlt, faPlay, faPlus, faPuzzlePiece, faQuestionCircle, faRedo,
-  faSearch, faSearchLocation, faSearchMinus, faSearchPlus, faServer, faShareAlt, faSitemap, faSortAmountDown,
-  faStepForward, faStop, faSyncAlt, faTags, faThList, faThumbtack, faTimes, faTransgender, faTree, faUndo,
-  faUniversity, faUnlink, faUpload, faUsers, faVenus, faWrench,
+  faArrowDown, faArrowLeft, faArrowRight, faArrowUp, faArrowsAltV, faBan, faBars, faCalendar,
+  faCaretDown, faCaretUp, faCheck, faCodeBranch, faCompress, faDatabase, faDownload, faExclamationTriangle,
+  faExpand, faGenderless, faGripHorizontal, faGripLines, faHistory, faInfoCircle, faLanguage,
+  faLink, faList, faLock, faMagic, faMap, faMapMarkerAlt, faMars, faMedkit, faPaintBrush, faPause,
+  faPencilAlt, faPlay, faPlus, faPuzzlePiece, faQuestionCircle, faRedo, faSearch, faSearchLocation,
+  faSearchMinus, faSearchPlus, faServer, faShareAlt, faSitemap, faSortAmountDown, faStepForward, faStop,
+  faSyncAlt, faTags, faThList, faThumbtack, faTimes, faTransgender, faTree, faUndo, faUniversity,
+  faUnlink, faUpload, faUsers, faVenus, faWrench,
   // For the BeautifyMarker library
   faBabyCarriage, faBullseye, faHome, faIndustry, faInfinity, faStarOfDavid, faWater
 );

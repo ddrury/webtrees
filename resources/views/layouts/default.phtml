@@ -13,6 +13,7 @@ use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleThemeInterface;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\ModuleService;
+use Fisharebest\Webtrees\Site;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\View;
@@ -145,12 +146,12 @@ use Psr\Http\Message\ServerRequestInterface;
         <script src="<?= e(asset('js/vendor.min.js')) ?>"></script>
         <script src="<?= e(asset('js/webtrees.min.js')) ?>"></script>
 
-        <script>
-          spotlight.init({
-            showGallery: true,
-            closeOnBody: true,
-          });
-        </script>
+        <?= view('lightgallery', [
+            'use_gallery' => true,
+            'filter_tabs' => (bool) Site::getPreference('FILTER_BY_TAB'),
+            'transition'  => 'lg-slide-circular',
+            'delay'       => 4000,
+          ]) ?>
 
         <?= View::stack('javascript') ?>
 
