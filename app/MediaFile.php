@@ -200,7 +200,6 @@ class MediaFile
                 'type'           => $this->mimeType(),
                 'href'           => $this->downloadUrl('inline'),
                 'data-id'        => $this->media()->xref(),
-                'data-thumbnail' => $this->imageUrl(100, 100, 'contain'),
                 'data-note'      => Registry::markdownFactory()->markdown($this->media->getNote()),
                 'data-download'  => json_encode($this->media->tree()->getPreference('SHOW_MEDIA_DOWNLOAD') >= Auth::accessLevel($this->media->tree())),
             ]);

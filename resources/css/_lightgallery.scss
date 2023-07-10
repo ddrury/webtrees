@@ -24,11 +24,12 @@ $lg-thumb-bg: #827f7f!default;
 .lg-thumb-item {
    border-radius: 8px!important;
    border-width: 3px!important;
+   border-color: #aaa!important;
    &:hover {
-    border-color: #ffffb3!important;
+    border-color: #ccc!important;
    }
    &.active {
-       border-color: #ffff00!important;
+       border-color: #fff!important;
    }
    img {
        object-fit: contain!important;

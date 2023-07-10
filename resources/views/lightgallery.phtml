@@ -48,10 +48,8 @@ use Fisharebest\Webtrees\View;
     let items = [];
     let collection = [];
     if (useGallery) {
-      const tabs = document.getElementById("individual-tabs");
-      if (filterTabs && tabs) {
-        const active_tab = document.querySelector(".tab-pane.active");
-        console.log(document.querySelectorAll("#individual-images .active .gallery"));
+      const active_tab = document.querySelector(".tab-pane.active");
+      if (filterTabs && active_tab) {
         items = items.concat(
           Array.from(document.querySelectorAll("#individual-images .active .gallery")),
           Array.from(active_tab.querySelectorAll(".gallery"))
@@ -81,7 +79,6 @@ use Fisharebest\Webtrees\View;
         id: data.id,
         thumb: img.src,
         src: element.href,
-        srcset: img.srcset,
         subHtml: img.alt + data.note || '',
         downloadUrl: JSON.parse(data.download || false) ? element.href.replace("inline", "attachment") : false,
       });
