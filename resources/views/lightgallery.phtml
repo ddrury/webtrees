@@ -80,7 +80,6 @@ use Fisharebest\Webtrees\View;
         id: data.id,
         thumb: img.src,
         src: element.href,
-        srcset: img.srcset,
         subHtml: img.alt + data.note || '',
         downloadUrl: JSON.parse(data.download || false) ? element.href.replace("inline", "attachment") : false,
       });
