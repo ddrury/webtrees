@@ -148,6 +148,10 @@ a:hover, .btn-link:hover, .nav-link:hover {
     display: none;
 }
 
+.wt-table-fixed {
+    table-layout: fixed;
+}
+
 /* Leaflet sets this to 1000, which conflicts with bootstrap dropdowns */
 .leaflet-bottom, .leaflet-top {
     z-index: 999;
