@@ -42,7 +42,7 @@ use Fisharebest\Webtrees\Services\UserService;
 use Fisharebest\Webtrees\Site;
 use Fisharebest\Webtrees\User;
 use Fisharebest\Webtrees\Webtrees;
-use Illuminate\Database\Capsule\Manager as DB;
+use Fisharebest\Webtrees\DB;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Str;
 use League\Flysystem\FilesystemOperator;
