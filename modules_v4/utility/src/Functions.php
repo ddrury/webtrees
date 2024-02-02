@@ -348,8 +348,7 @@ class Functions
         $media        = Registry::mediaFactory()->make($row->m_id, $tree);
         assert($media instanceof Media);
         $media_file   = new MediaFile($media->gedcom(), $media);
-        $old_filename = $this->root . DIRECTORY_SEPARATOR .
-            Site::getPreference('INDEX_DIRECTORY') .
+        $old_filename = Site::getPreference('INDEX_DIRECTORY') .
             $tree->getPreference('MEDIA_DIRECTORY') .
             $row->multimedia_file_refn; // filenames with full path
         $new_filename = null;
