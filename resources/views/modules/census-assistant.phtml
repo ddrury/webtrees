@@ -138,7 +138,7 @@ use Fisharebest\Webtrees\View;
         method: 'POST',
     })
     .then(response => response.text())
-    .then(function (text) => {
+    .then(function (text) {
         const data   = JSON.parse(text);
         document.querySelector('#census-assistant-table thead').innerHTML = data.header;
         document.querySelector('#census-assistant-table tbody').innerHTML = '';

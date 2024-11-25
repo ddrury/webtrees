@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace Fisharebest\Webtrees\Module;
 
 use Fisharebest\Webtrees\Census\CensusInterface;
-use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Registry;
@@ -29,9 +28,8 @@ use Fisharebest\Webtrees\Services\RelationshipService;
 use Fisharebest\Webtrees\Services\TreeService;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Support\Collection;
-use Psr\Http\Message\ResponseInterfa
-
 use Psr\Http\Message\ResponseInterface;
+
 use Psr\Http\Message\ServerRequestInterface;
 
 use function array_keys;
@@ -48,6 +46,14 @@ use function view;
  */
 class CensusAssistantModule extends AbstractModule
 {
+
+    private TreeService $tree_service;
+
+    public function __construct(TreeService $tree_service)
+    {
+        $this->tree_service   = $tree_service;
+    }
+
     /**
      * How should this module be identified in the control panel, etc.?
      *
@@ -72,7 +78,6 @@ class CensusAssistantModule extends AbstractModule
      */
     public function postCensusInitializeAction(ServerRequestInterface $request): ResponseInterface
     {
-        $treeService = new TreeService();
         $params      = (array) $request->getParsedBody();
 
         /** @var string $census_class */
@@ -81,7 +86,7 @@ class CensusAssistantModule extends AbstractModule
         $tree_id      = (int) $params['tree_id'];
         /** @var CensusInterface $census */
         $census       = new $census_class();
-        $individual   = Registry::individualFactory()->make($xref, $treeService->find($tree_id));
+        $individual   = Registry::individualFactory()->make($xref, $this->tree_service->find($tree_id));
 
         assert($individual instanceof Individual);
 
@@ -295,8 +300,7 @@ class CensusAssistantModule extends AbstractModule
      */
     private function familyMembers(Individual $individual, CensusInterface $census): array
     {
-        /** @var RelationshipService $relationship_service */
-        $relationship_service = app(RelationshipService::class);
+        $relationship_service = Registry::container()->get(RelationshipService::class);
         $max_age     = (int) $individual->tree()->getPreference('MAX_ALIVE_AGE');
         $censusYear  = (int) substr($census->censusDate(), -4);
         $options     = [];
