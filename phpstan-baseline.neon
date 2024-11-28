@@ -3337,6 +3337,12 @@ parameters:
 			path: app/Module/CensusAssistantModule.php
 
 		-
+			message: '#^Parameter \#1 \$census of method Fisharebest\\Webtrees\\Module\\CensusAssistantModule\:\:familyMembers\(\) expects Fisharebest\\Webtrees\\Census\\CensusInterface, object given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Module/CensusAssistantModule.php
+
+		-
 			message: '#^Parameter \#1 \$request of static method Fisharebest\\Webtrees\\Validator\:\:attributes\(\) expects Psr\\Http\\Message\\ServerRequestInterface, mixed given\.$#'
 			identifier: argument.type
 			count: 1
