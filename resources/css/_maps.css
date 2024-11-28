@@ -21,30 +21,11 @@
  * Formatting for LeafletJS based maps.
  */
 
-.leaflet-control-layers-selector {
-    margin-right: 2px;
+:root {
+    --wt-map-height: 70vh;
 }
-
-/* Default is 12px - a bit too small */
-.leaflet-container {
-    font-size: 0.8rem;
-}
-
-/* No way to target parents-only... */
-.leaflet-layerstree-header-name {
-    font-weight: bold;
-}
-
-.leaflet-layerstree-node .leaflet-layerstree-node .leaflet-layerstree-header-name {
-    font-weight: normal;
-}
-
 .wt-map {
     height: var(--wt-map-height);
-}
-
-:fullscreen .wt-map {
-    height: 100%;
 }
 
 .wt-map-sidebar {
@@ -52,6 +33,10 @@
     overflow-y: auto;
 }
 
+:fullscreen .wt-map {
+    height:100%;
+}
+
 :fullscreen .wt-map-sidebar {
-    height: 100%;
+    height:100%;
 }

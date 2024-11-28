@@ -676,6 +676,14 @@
    * @returns Map
    */
   webtrees.buildLeafletJsMap = function (id, config, resetCallback) {
+    // Resize map on enter/exit fullscreen
+    document.addEventListener("fullscreenchange", (event) => {
+      map.on('resize', () => {
+        map.closePopup();
+        resetCallback(event);
+      });
+    });
+
     const zoomControl = new L.control.zoom({
       zoomInTitle: config.i18n.zoomIn,
       zoomoutTitle: config.i18n.zoomOut,
@@ -739,7 +747,7 @@
 
 
     // Create the map with all controls and layers
-    return L.map(id, {
+    const map = L.map(id, {
       zoomControl: false,
     })
       .addControl(zoomControl)
@@ -751,6 +759,7 @@
         openedSymbol: config.icons.collapse,
       }));
 
+    return map;
   };
 
   /**
