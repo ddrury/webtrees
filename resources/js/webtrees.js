@@ -1,6 +1,6 @@
 /**
  * webtrees: online genealogy
- * Copyright (C) 2023 webtrees development team
+ * Copyright (C) 2025 webtrees development team
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -676,6 +676,14 @@
    * @returns Map
    */
   webtrees.buildLeafletJsMap = function (id, config, resetCallback) {
+    // Resize map on enter/exit fullscreen
+    document.addEventListener("fullscreenchange", (event) => {
+      map.on('resize', () => {
+        map.closePopup();
+        resetCallback(event);
+      });
+    });
+
     const zoomControl = new L.control.zoom({
       zoomInTitle: config.i18n.zoomIn,
       zoomoutTitle: config.i18n.zoomOut,
@@ -717,29 +725,40 @@
       },
     });
 
+
+    const preferredLayer = localStorage.getItem('map_default_layer');
     let defaultLayer = null;
+    let systemDefaultLayer = null;
 
     for (let [, provider] of Object.entries(config.mapProviders)) {
       for (let [, child] of Object.entries(provider.children)) {
+        child.name = provider.label + '-' + child.label;
         if ('bingMapsKey' in child) {
           child.layer = L.tileLayer.bing(child);
         } else {
           child.layer = L.tileLayer(child.url, child);
         }
         if (provider.default && child.default) {
+          systemDefaultLayer = child.layer;
+        }
+        if (preferredLayer === child['name']) {
           defaultLayer = child.layer;
         }
       }
     }
 
     if (defaultLayer === null) {
-      console.log('No default map layer defined - using the first one.');
-      defaultLayer = config.mapProviders[0].children[0].layer;
+      if (systemDefaultLayer === null) {
+        console.log('No default map layer defined - using the first one.');
+        defaultLayer = config.mapProviders[0].children[0].layer;
+      } else {
+        defaultLayer = systemDefaultLayer;
+      }
     }
 
 
     // Create the map with all controls and layers
-    return L.map(id, {
+    const map = L.map(id, {
       zoomControl: false,
     })
       .addControl(zoomControl)
@@ -749,8 +768,12 @@
       .addControl(L.control.layers.tree(config.mapProviders, null, {
         closedSymbol: config.icons.expand,
         openedSymbol: config.icons.collapse,
-      }));
+      }))
+      .on('baselayerchange', (l) => {
+        localStorage.setItem('map_default_layer', l.layer.options.name);
+      });
 
+    return map;
   };
 
   /**

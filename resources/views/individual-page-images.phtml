@@ -34,7 +34,11 @@ use Illuminate\Support\Collection;
                 <i class="wt-individual-silhouette wt-individual-silhouette-<?= strtolower($record->sex()) ?> wt-icon-flip-rtl w-100"></i>
             </div>
         <?php elseif ($individual_media->count() === 1) : ?>
-            <?= $individual_media->first()->displayImage(200, 260, 'crop', ['class' => 'img-thumbnail img-fluid w-100']) ?>
+            <div id="individual-images">
+                <div class="active">
+                    <?= $individual_media->first()->displayImage(200, 260, 'crop', ['class' => 'img-thumbnail img-fluid w-100']) ?>
+                </div>
+            </div>
         <?php else : ?>
             <div id="individual-images" class="carousel slide" data-bs-interval="false">
                 <div class="carousel-inner">
