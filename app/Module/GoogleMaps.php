@@ -19,15 +19,12 @@ declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Module;
 
-use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\FlashMessages;
-use Fisharebest\Webtrees\Http\Exceptions\HttpServerErrorException;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Validator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-use function e;
 use function redirect;
 
 /**
@@ -51,6 +48,11 @@ class GoogleMaps extends AbstractModule implements ModuleConfigInterface, Module
         return I18N::translate('Create maps using %s.', $link);
     }
 
+    /**
+     * Should this module be enabled when it is first installed?
+     *
+     * @return bool
+     */
     public function isEnabledByDefault(): bool
     {
         return false;
@@ -105,16 +107,6 @@ class GoogleMaps extends AbstractModule implements ModuleConfigInterface, Module
     public function leafletJsTileLayers(): array
     {
         $api_key = $this->getPreference('api_key');
-
-        if ($api_key === '') {
-            $message = I18N::translate('This service requires an API key.');
-
-            if (Auth::isAdmin()) {
-                $message = '<a href="' . e($this->getConfigLink()) . '">' . $message . '</a>';
-            }
-
-            throw new HttpServerErrorException($message);
-        }
 
         return [
             (object) [
