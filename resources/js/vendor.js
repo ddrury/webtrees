@@ -73,15 +73,19 @@ import 'hideshowpassword';
 
 import 'moment';
 
-import 'jquery-colorbox';
-import 'pinch-zoom-element';
-
 import 'leaflet';
 import 'leaflet.markercluster';
 import 'beautifymarker';
 import 'leaflet-control-geocoder';
 import 'leaflet.control.layers.tree';
 import 'leaflet-bing-layer';
+
+window.lightGallery = require('lightgallery/lightgallery.umd.js');
+window.lgZoom = require('lightgallery/plugins/zoom/lg-zoom.umd.js');
+window.lgThumbnail = require('lightgallery/plugins/thumbnail/lg-thumbnail.umd.js');
+window.lgFullscreen = require('lightgallery/plugins/fullscreen/lg-fullscreen.umd.js');
+window.lgAutoplay = require('lightgallery/plugins/autoplay/lg-autoplay.umd.js');
+window.lgRotate = require('lightgallery/plugins/rotate/lg-rotate.umd.js');
 
 window.$ = window.jQuery = $;
 

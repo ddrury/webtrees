@@ -189,17 +189,19 @@ class MediaFile
 
         if ($this->isImage()) {
             $image = '<img ' . Html::attributes($image_attributes + [
-                        'dir'    => 'auto',
-                        'src'    => $src,
-                        'srcset' => implode(',', $srcset),
-                        'alt'    => strip_tags($this->media->fullName()),
-                    ]) . '>';
+                'dir'    => 'auto',
+                'src'    => $src,
+                'alt'    => strip_tags($this->media->fullName()),
+            ]) . '>';
 
             $link_attributes = Html::attributes([
-                'class'      => 'gallery',
-                'type'       => $this->mimeType(),
-                'href'       => $this->downloadUrl('inline'),
-                'data-title' => strip_tags($this->media->fullName()),
+                'class'          => 'gallery',
+                'type'           => $this->mimeType(),
+                'href'           => $this->downloadUrl('inline'),
+                'data-id'        => $this->media()->xref(),
+                //'data-thumbnail' => $this->imageUrl(100, 100, 'contain'),
+                'data-note'      => Registry::markdownFactory()->markdown($this->media->getNote()),
+                'data-download'  => json_encode($this->media->tree()->getPreference('SHOW_MEDIA_DOWNLOAD') >= Auth::accessLevel($this->media->tree())),
             ]);
         } else {
             $image = view('icons/mime', ['type' => $this->mimeType()]);

@@ -84,6 +84,7 @@ use Fisharebest\Webtrees\View;
         <script src="<?= e(asset('js/vendor.min.js')) ?>"></script>
         <script src="<?= e(asset('js/webtrees.min.js')) ?>"></script>
 
+        <?= view('lightgallery') ?>
         <?= View::stack('javascript') ?>
 
         <?= Registry::container()->get(ModuleService::class)->findByInterface(ModuleGlobalInterface::class)->map(static fn (ModuleGlobalInterface $module): string => $module instanceof ModuleCustomInterface || $module instanceof CustomCssJsModule ? '' : $module->bodyContent())->implode('') ?>
