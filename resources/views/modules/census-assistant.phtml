@@ -7,7 +7,7 @@ use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\View;
 
 /**
- * @var Individual $individual
+ * @var Individual|null $individual
  */
 
 ?>
@@ -66,6 +66,17 @@ use Fisharebest\Webtrees\View;
         </div>
     </div>
 
+    <div class="form-group">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <label for="census-assistant-family" class="input-group-text">
+                    <?= I18N::translate('Family members') ?>
+                </label>
+            </div>
+            <select id="census-assistant-family" class="form-select" name="census-assistant-family"></select>
+        </div>
+    </div>
+
     <div class="table-responsive">
         <table class="table table-sm table-borderless small wt-census-assistant-table" id="census-assistant-table">
             <thead class="wt-census-assistant-header"></thead>
@@ -86,6 +97,10 @@ use Fisharebest\Webtrees\View;
 
 <?php View::push('javascript') ?>
 <script>
+  const family_tomselect = new TomSelect(document.getElementById('census-assistant-family'), {
+    placeholder: "<?= I18N::translate('Select a family member') ?>"
+  });
+
   // When a census date/place is selected, activate the census-assistant
   function censusAssistantSelect () {
     const select = this;
@@ -113,14 +128,21 @@ use Fisharebest\Webtrees\View;
 
     let formData = new FormData();
     formData.append('census', census);
+    formData.append('xref', '<?= $individual->xref() ?>');
+    formData.append('tree_id', '<?= $individual->tree()->id() ?>');
     formData.append('_csrf', document.querySelector('meta[name=csrf]').content);
 
-    const url = <?= json_encode(route('module', ['module' => 'GEDFact_assistant', 'action' => 'CensusHeader', 'tree' => $individual->tree()->name()]), JSON_THROW_ON_ERROR) ?>;
-    webtrees.httpPost(url, formData)
-      .then(response => response.text())
-      .then(function (text) {
-        document.querySelector('#census-assistant-table thead').innerHTML = text;
+    fetch(<?= json_encode(route('module', ['module' => 'GEDFact_assistant', 'action' => 'CensusInitialize', 'tree' => $individual->tree()->name()]), JSON_THROW_ON_ERROR) ?>, {
+        credentials: 'same-origin',
+        body: formData,
+        method: 'POST',
+    })
+    .then(response => response.text())
+    .then(function (text) {
+        const data   = JSON.parse(text);
+        document.querySelector('#census-assistant-table thead').innerHTML = data.header;
         document.querySelector('#census-assistant-table tbody').innerHTML = '';
+        family_tomselect.addOptions([data.family], false);
       });
   }
 
@@ -130,21 +152,29 @@ use Fisharebest\Webtrees\View;
     this.setAttribute('hidden', '');
     document.getElementById('census-assistant').removeAttribute('hidden');
     // Set the current individual as the head of household.
-    censusAssistantAdd();
+    censusAssistantAdd('individual');
 
     return false;
   }
 
   // Add the currently selected individual to the census
-  function censusAssistantAdd () {
-    var censusSelector = document.querySelector('.census-selector');
-    var census = censusSelector.options[censusSelector.selectedIndex].dataset.wtCensus;
-    var indi_selector = document.querySelector('#census-assistant-individual');
-    var xref = indi_selector.options[indi_selector.selectedIndex].value;
-    var headInput = document.querySelector('#census-assistant-table td input');
-    var head = headInput === null ? xref : headInput.value;
+  function censusAssistantAdd(caller) {
+    const selector = document.querySelector('#census-assistant-' + caller);
+    const xref     = selector.options[selector.selectedIndex].value;
+    const rows     = Array.from(document.querySelectorAll('#census-assistant-table tbody tr td:first-child input')).map(input => input.value);
 
-    let formData = new FormData();
+    // Is the selected individual already in the census?
+    if (xref !== '' && rows.includes(xref)) {
+      webtrees.resetTomSelect(document.querySelector('#census-assistant-individual').tomselect, '', '');
+
+      return false;
+    }
+
+    const censusSelector = document.querySelector('.census-selector');
+    const census         = censusSelector.options[censusSelector.selectedIndex].dataset.wtCensus;
+    const headInput      = document.querySelector('#census-assistant-table td input');
+    const head           = headInput === null ? xref : headInput.value;
+    const formData       = new FormData();
     formData.append('census', census);
     formData.append('_csrf', document.querySelector('meta[name=csrf]').content);
     formData.append('head', head);
@@ -156,11 +186,20 @@ use Fisharebest\Webtrees\View;
       .then(response => response.text())
       .then(function (text) {
         document.querySelector('#census-assistant-table tbody').insertAdjacentHTML('beforeend', text);
-        webtrees.resetTomSelect(document.querySelector('#census-assistant-individual').tomselect, '', '');
-      });
+        document.querySelector('#census-assistant-individual').tomselect.clear(true);
+        document.querySelector('#census-assistant-individual').tomselect.clearOptions();
+        if (xref !== '') {
+          family_tomselect.updateOption(xref, {...family_tomselect.options[xref], ...{disabled: true}});
+          family_tomselect.clear(true);
+        }
+    });
 
     return false;
   }
+
+  family_tomselect.on('change', () => {
+    censusAssistantAdd('family');
+  });
 
   document.querySelectorAll('.census-selector').forEach(function (el) {
     el.addEventListener('change', censusAssistantSelect);
@@ -171,13 +210,18 @@ use Fisharebest\Webtrees\View;
   });
 
   document.querySelectorAll('.census-assistant-add').forEach(function (el) {
-    el.addEventListener('click', censusAssistantAdd);
+    el.addEventListener('click', () => {
+      censusAssistantAdd('individual')});
   });
 
   document.querySelectorAll('#census-assistant-table').forEach(function (el) {
-    el.addEventListener('click', function (el) {
+    el.addEventListener('click', (el) => {
       if (el.target.matches('.wt-icon-delete')) {
-        el.target.closest('tr').remove();
+        let line = el.target.closest('tr');
+        let xref = line.firstChild.firstChild.value;
+        line.remove();
+        family_tomselect.updateOption(xref, {...family_tomselect.options[xref], ...{disabled: false}});
+        family_tomselect.clear(true);
       }
     });
   });
