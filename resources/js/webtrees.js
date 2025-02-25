@@ -37,49 +37,6 @@
   }
 
   /**
-   * Simple wrapper around fetch() with our preferred headers
-   *
-   * @param {string} url
-   * @returns {Promise}
-   */
-  webtrees.httpGet = function (url) {
-    const options = {
-      method: 'GET',
-      credentials: 'same-origin',
-      referrerPolicy: 'same-origin',
-      headers: new Headers({
-        'x-requested-with': 'XMLHttpRequest',
-      })
-    };
-
-    return fetch(url, options);
-  }
-
-  /**
-   * Simple wrapper around fetch() with our preferred headers
-   *
-   * @param {string} url
-   * @param {string|FormData} body
-   * @returns {Promise}
-   */
-  webtrees.httpPost= function (url, body = '') {
-    const csrfToken = document.head.querySelector('meta[name=csrf]').getAttribute('content');
-
-    const options = {
-      body: body,
-      method: 'POST',
-      credentials: 'same-origin',
-      referrerPolicy:  'same-origin',
-      headers: new Headers({
-        'X-CSRF-TOKEN': csrfToken,
-        'x-requested-with': 'XMLHttpRequest',
-      })
-    };
-
-    return fetch(url, options, body);
-  }
-
-  /**
    * Look for non-latin characters in a string.
    * @param {string} str
    * @returns {string}
@@ -415,7 +372,7 @@
   function calGenerateSelectorContent (dateFieldId, dateDivId, date) {
     let i, j;
     let content = '<table border="1"><tr>';
-    content += '<td><select class="form-select" id="' + dateFieldId + '_daySelect" onchange="return webtrees.calUpdateCalendar(\'' + dateFieldId + '\', \'' + dateDivId + '\');">';
+    content += '<td><select class="form-control" id="' + dateFieldId + '_daySelect" onchange="return webtrees.calUpdateCalendar(\'' + dateFieldId + '\', \'' + dateDivId + '\');">';
     for (i = 1; i < 32; i++) {
       content += '<option value="' + i + '"';
       if (date.getDate() === i) {
@@ -424,7 +381,7 @@
       content += '>' + i + '</option>';
     }
     content += '</select></td>';
-    content += '<td><select class="form-select" id="' + dateFieldId + '_monSelect" onchange="return webtrees.calUpdateCalendar(\'' + dateFieldId + '\', \'' + dateDivId + '\');">';
+    content += '<td><select class="form-control" id="' + dateFieldId + '_monSelect" onchange="return webtrees.calUpdateCalendar(\'' + dateFieldId + '\', \'' + dateDivId + '\');">';
     for (i = 1; i < 13; i++) {
       content += '<option value="' + i + '"';
       if (date.getMonth() + 1 === i) {
@@ -549,31 +506,24 @@
   };
 
   /**
-   * Make bootstrap "collapse" elements persistent.
-   *
-   * @param {HTMLElement} element
+   * Persistent checkbox options to hide/show extra data.
+   * @param {HTMLInputElement} element
    */
   webtrees.persistentToggle = function (element) {
-    const key = 'state-of-' + element.dataset.wtPersist;
-    const previous_state = localStorage.getItem(key);
+    if (element instanceof HTMLInputElement && element.type === 'checkbox') {
+      const key = 'state-of-' + element.dataset.wtPersist;
+      const state = localStorage.getItem(key);
 
-    // Accordion buttons have aria-expanded.  Checkboxes are checked/unchecked
-    const current_state = element.getAttribute('aria-expanded') ?? element.checked.toString();
+      // Previously selected? Select again now.
+      if (state === 'true') {
+        element.click();
+      }
 
-    // Previously selected? Select again now.
-    if (previous_state !== null && previous_state !== current_state) {
-      element.click();
-    }
-
-    // Remember state for the next page load.
-    element.addEventListener('click', function () {
-      if (element.type === 'checkbox') {
+      // Remember state for the next page load.
+      element.addEventListener('change', function () {
         localStorage.setItem(key, element.checked.toString());
-      }
-      if (element.type === 'button') {
-        localStorage.setItem(key, element.getAttribute('aria-expanded'));
-      }
-    });
+      });
+    }
   };
 
   /**
@@ -652,7 +602,7 @@
             replace: function (url, uriEncodedQuery) {
               const symbol = (url.indexOf("?") > 0) ? '&' : '?';
               if (that.dataset.wtAutocompleteExtra === 'SOUR') {
-                let row_group = that.closest('.wt-nested-edit-fields').previousElementSibling;
+                let row_group = that.closest('.form-group').previousElementSibling;
                 while (row_group.querySelector('select') === null) {
                   row_group = row_group.previousElementSibling;
                 }
@@ -673,16 +623,10 @@
    * @param {string} id
    * @param {object} config
    * @param {function} resetCallback
+   * @param {array|undefined} overlay
    * @returns Map
    */
-  webtrees.buildLeafletJsMap = function (id, config, resetCallback) {
-    // Resize map on enter/exit fullscreen
-    document.addEventListener("fullscreenchange", (event) => {
-      map.on('resize', () => {
-        map.closePopup();
-        resetCallback(event);
-      });
-    });
+  webtrees.buildLeafletJsMap = function (id, config, resetCallback, overlay) {
 
     const zoomControl = new L.control.zoom({
       zoomInTitle: config.i18n.zoomIn,
@@ -693,88 +637,63 @@
       options: {
         position: 'topleft',
       },
-      onAdd: () => {
-        const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-        const anchor = L.DomUtil.create('a', 'leaflet-control-reset', container);
-
+      onAdd: function (map) {
+        let container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+        container.onclick = resetCallback;
+        let reset = config.i18n.reset;
+        let anchor = L.DomUtil.create('a', 'leaflet-control-reset', container);
+        anchor.setAttribute('aria-label', reset);
         anchor.href = '#';
-        anchor.setAttribute('aria-label', config.i18n.reset); /* Firefox doesn't yet support element.ariaLabel */
-        anchor.title = config.i18n.reset;
-        anchor.setAttribute('role', 'button');
-        anchor.innerHTML = config.icons.reset;
-        anchor.onclick = resetCallback;
+        anchor.title = reset;
+        anchor.role = 'button';
+        let image = L.DomUtil.create('i', 'fas fa-redo', anchor);
+        image.alt = reset;
 
         return container;
       },
     });
 
-    const fullscreenControl = L.Control.extend({
-      options: {
-        position: 'topleft',
-      },
-      onAdd: (map) => {
-        const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-        const anchor = L.DomUtil.create('a', 'leaflet-control-fullscreen', container);
-
-        anchor.href = '#';
-        anchor.setAttribute('role', 'button');
-        anchor.dataset.wtFullscreen = '.wt-fullscreen-container';
-        anchor.innerHTML = config.icons.fullScreen;
-
-        return container;
-      },
-    });
-
-
-    const preferredLayer = localStorage.getItem('map_default_layer');
     let defaultLayer = null;
-    let systemDefaultLayer = null;
 
     for (let [, provider] of Object.entries(config.mapProviders)) {
       for (let [, child] of Object.entries(provider.children)) {
-        child.name = provider.label + '-' + child.label;
         if ('bingMapsKey' in child) {
           child.layer = L.tileLayer.bing(child);
         } else {
           child.layer = L.tileLayer(child.url, child);
         }
         if (provider.default && child.default) {
-          systemDefaultLayer = child.layer;
-        }
-        if (preferredLayer === child['name']) {
           defaultLayer = child.layer;
         }
       }
     }
 
     if (defaultLayer === null) {
-      if (systemDefaultLayer === null) {
-        console.log('No default map layer defined - using the first one.');
-        defaultLayer = config.mapProviders[0].children[0].layer;
-      } else {
-        defaultLayer = systemDefaultLayer;
-      }
+      console.log('No default map layer defined - using the first one.');
+      let defaultLayer = config.mapProviders[0].children[0].layer;
     }
 
+    //Create a dummy overlay if not defined
+      overlay = overlay || {
+        layer: new L.LayerGroup(),
+        tree: null
+      };
 
     // Create the map with all controls and layers
-    const map = L.map(id, {
+    return L.map(id, {
       zoomControl: false,
     })
       .addControl(zoomControl)
-      .addControl(new fullscreenControl())
       .addControl(new resetControl())
       .addLayer(defaultLayer)
-      .addControl(L.control.layers.tree(config.mapProviders, null, {
+      .addLayer(overlay.layer)
+      .addControl(L.control.layers.tree(config.mapProviders, overlay.tree, {
         closedSymbol: config.icons.expand,
         openedSymbol: config.icons.collapse,
-      }))
-      .on('baselayerchange', (l) => {
-        localStorage.setItem('map_default_layer', l.layer.options.name);
-      });
+      }));
 
-    return map;
   };
+
 
   /**
    * Initialize a tom-select input
@@ -786,46 +705,33 @@
       return element.tomselect;
     }
 
-    if (element.dataset.wtUrl) {
-      let options = {
+    let options = {};
+
+    if (element.dataset.url) {
+      options = {
         plugins: ['dropdown_input', 'virtual_scroll'],
-        maxOptions: false,
-        searchField: [], // We filter on the server, so don't filter on the client.
         render: {
           item: (data, escape) => '<div>' + data.text + '</div>',
           option: (data, escape) => '<div>' + data.text + '</div>',
-          no_results: (data, escape) => '<div class="no-results">' + element.dataset.wtI18nNoResults + '</div>',
         },
-        firstUrl: query => element.dataset.wtUrl + '&query=' + encodeURIComponent(query),
+        firstUrl: query => element.dataset.url + '&query=' + encodeURIComponent(query),
         load: function (query, callback) {
-          webtrees.httpGet(this.getUrl(query))
+          fetch(this.getUrl(query))
             .then(response => response.json())
             .then(json => {
-              if (json.nextUrl !== null) {
-                this.setNextUrl(query, json.nextUrl + '&query=' + encodeURIComponent(query));
-              }
+              this.setNextUrl(query, json.nextUrl + '&query=' + encodeURIComponent(query));
               callback(json.data);
             })
             .catch(callback);
         },
       };
-
-      if (!element.required) {
-        options.plugins.push('clear_button');
-      }
-
-      return new TomSelect(element, options);
+    } else {
+      options = {
+        plugins: ['remove_button'],
+      };
     }
 
-    if (element.multiple) {
-      return new TomSelect(element, { plugins: ['caret_position', 'remove_button'] });
-    }
-
-    if (!element.required) {
-      return new TomSelect(element, { plugins: ['clear_button'] });
-    }
-
-    return new TomSelect(element, { });
+    return new TomSelect(element, options);
   }
 
   /**
@@ -852,76 +758,20 @@
   webtrees.initializeIFSRO = function(select, container) {
     select.addEventListener('change', function () {
       // Show only the selected selector.
+      console.log(select.value);
       container.querySelectorAll('.select-record').forEach(element => element.classList.add('d-none'));
       container.querySelectorAll('.select-' + select.value).forEach(element => element.classList.remove('d-none'));
-
       // Enable only the selected selector (so that disabled ones do not get submitted).
       container.querySelectorAll('.select-record select').forEach(element => {
         element.disabled = true;
-        if (element.matches('.tom-select')) {
-          element.tomselect.disable();
-        }
+        element.tomselect.disable();
       });
       container.querySelectorAll('.select-' + select.value + ' select').forEach(element => {
         element.disabled = false;
-        if (element.matches('.tom-select')) {
-          element.tomselect.enable();
-        }
+        element.tomselect.enable();
       });
     });
-  };
-
-  /**
-   * Save a form using ajax, for use in modals
-   *
-   * @param {Event} event
-   */
-  webtrees.createRecordModalSubmit = function (event) {
-    event.preventDefault();
-    const form = event.target;
-    const modal = document.getElementById('wt-ajax-modal')
-    const modal_content = modal.querySelector('.modal-content');
-    const select = document.getElementById(modal_content.dataset.wtSelectId);
-
-    webtrees.httpPost(form.action, new FormData(form))
-      .then(response => response.json())
-      .then(json => {
-        if (select && json.value !== '') {
-          // This modal was activated by the "create new" button in a select edit control.
-          webtrees.resetTomSelect(select.tomselect, json.value, json.text);
-
-          bootstrap.Modal.getInstance(modal).hide();
-        } else {
-          // Show the success/fail message in the existing modal.
-          modal_content.innerHTML = json.html;
-        }
-      })
-      .catch(error => {
-        modal_content.innerHTML = error;
-      });
-  };
-
-  /**
-   * Text areas don't support the pattern attribute, so apply it manually via data-wt-pattern.
-   *
-   * @param {HTMLFormElement} form
-   */
-  webtrees.textareaPatterns = function (form) {
-    form.addEventListener('submit', function (event) {
-      event.target.querySelectorAll('textarea[data-wt-pattern]').forEach(function (element) {
-        const pattern = new RegExp('^' + element.dataset.wtPattern + '$');
-
-        if (!element.readOnly && element.value !== '' && !pattern.test(element.value)) {
-          event.preventDefault();
-          event.stopPropagation();
-          element.classList.add('is-invalid');
-          element.scrollIntoView();
-        } else {
-          element.classList.remove('is-invalid');
-        }
-      });
-    });
-  };
+  }
 }(window.webtrees = window.webtrees || {}));
 
 // Send the CSRF token on all AJAX requests
@@ -964,9 +814,9 @@ $(function () {
   };
 
   // DataTables - start hidden to prevent FOUC.
-  document.querySelectorAll('table.datatables').forEach(function (element) {
-    new DataTable(element);
-    element.classList.remove('d-none');
+  $('table.datatables').each(function () {
+    $(this).DataTable();
+    $(this).removeClass('d-none');
   });
 
   // Save button/checkbox state between pages
@@ -1035,16 +885,20 @@ $(function () {
 
 // Prevent form re-submission via accidental double-click.
 document.addEventListener('submit', function (event) {
-  if (event.target.method === 'POST') {
-    if (event.target.classList.contains('form-is-submitting')) {
-      event.preventDefault();
-    } else {
-      event.target.classList.add('form-is-submitting');
-    }
+  const form = event.target;
+
+  if (form.reportValidity()) {
+    form.addEventListener('submit', (event) => {
+      if (form.classList.contains('form-is-submitting')) {
+        event.preventDefault();
+      }
+
+      form.classList.add('form-is-submitting');
+    });
   }
 });
 
-// Convert data-wt-* attributes into useful behavior.
+// Convert data-wt-confirm and data-wt-post-url/data-wt-reload-url attributes into useful behavior.
 document.addEventListener('click', (event) => {
   const target = event.target.closest('a,button');
 
@@ -1054,11 +908,18 @@ document.addEventListener('click', (event) => {
 
   if ('wtConfirm' in target.dataset && !confirm(target.dataset.wtConfirm)) {
     event.preventDefault();
-    return;
   }
 
   if ('wtPostUrl' in target.dataset) {
-    webtrees.httpPost(target.dataset.wtPostUrl).then(() => {
+    const token = document.querySelector('meta[name=csrf]').content;
+
+    fetch(target.dataset.wtPostUrl, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': token,
+        'X-Requested-with': 'XMLHttpRequest',
+      },
+    }).then(() => {
       if ('wtReloadUrl' in target.dataset) {
         // Go somewhere else. e.g. the home page after logout.
         document.location = target.dataset.wtReloadUrl;
@@ -1069,19 +930,5 @@ document.addEventListener('click', (event) => {
     }).catch((error) => {
       alert(error);
     });
-  }
-
-  if (('wtFullscreen' in target.dataset)) {
-    event.stopPropagation();
-
-    const element = target.closest(target.dataset.wtFullscreen);
-
-    if (document.fullscreenElement === element) {
-      document.exitFullscreen()
-        .catch((error) => alert(error));
-    } else {
-      element.requestFullscreen()
-        .catch((error) => alert(error));
-    }
   }
 });

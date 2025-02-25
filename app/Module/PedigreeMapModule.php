@@ -69,9 +69,8 @@ class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, 
     protected RelationshipService $relationship_service;
 
     /**
-     * @param ChartService        $chart_service
-     * @param LeafletJsService    $leaflet_js_service
-     * @param RelationshipService $relationship_service
+     * @param ChartService     $chart_service
+     * @param LeafletJsService $leaflet_js_service
      */
     public function __construct(
         ChartService $chart_service,
@@ -145,7 +144,7 @@ class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, 
     /**
      * The URL for a page showing chart options.
      *
-     * @param Individual                                $individual
+     * @param Individual                        $individual
      * @param array<bool|int|string|array<string>|null> $parameters
      *
      * @return string
@@ -216,6 +215,7 @@ class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, 
         ];
 
         $sosa_points = [];
+        $lines       = [];
 
         foreach ($facts as $sosa => $fact) {
             $location = new PlaceLocation($fact->place()->gedcomName());
@@ -231,7 +231,6 @@ class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, 
             }
 
             if ($latitude !== null && $longitude !== null) {
-                $polyline           = null;
                 $sosa_points[$sosa] = [$latitude, $longitude];
                 $sosa_child         = intdiv($sosa, 2);
                 $generation         = (int) log($sosa, 2);
@@ -239,10 +238,7 @@ class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, 
                 $class              = 'wt-pedigree-map-gen-' . $generation % self::COUNT_CSS_COLORS;
 
                 if (array_key_exists($sosa_child, $sosa_points)) {
-                    // Would like to use a GeometryCollection to hold LineStrings
-                    // rather than generate polylines but the MarkerCluster library
-                    // doesn't seem to like them
-                    $polyline = [
+                    $lines[] = [
                         'points'  => [
                             $sosa_points[$sosa_child],
                             [$latitude, $longitude],
@@ -260,13 +256,12 @@ class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, 
                         'coordinates' => [$longitude, $latitude],
                     ],
                     'properties' => [
-                        'polyline'  => $polyline,
                         'iconcolor' => $color,
-                        'tooltip'   => null,
+                        'tooltip'   => $fact->place()->gedcomName(),
                         'summary'   => view('modules/pedigree-map/events', [
                             'class'        => $class,
                             'fact'         => $fact,
-                            'relationship' => $this->getSosaName($sosa),
+                            'relationship' => ucfirst($this->getSosaName($sosa)),
                             'sosa'         => $sosa,
                         ]),
                     ],
@@ -274,7 +269,10 @@ class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, 
             }
         }
 
-        return $geojson;
+        return [
+            'geoJSON'   => $geojson,
+            'polylines' => $lines,
+        ];
     }
 
     /**
@@ -292,7 +290,6 @@ class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, 
         $individual  = Auth::checkIndividualAccess($individual, false, true);
         $ancestors   = $chart_service->sosaStradonitzAncestors($individual, $generations);
         $facts       = [];
-
         foreach ($ancestors as $sosa => $person) {
             if ($person->canShow()) {
                 $birth = $person->facts(Gedcom::BIRTH_EVENTS, true)
