@@ -24,6 +24,8 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Validator;
+use Fisharebest\Webtrees\Services\RelationshipService;
+use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -33,6 +35,7 @@ use function e;
 use function response;
 use function str_repeat;
 use function str_replace;
+use function strip_tags;
 use function view;
 
 class CensusAssistantModule extends AbstractModule
@@ -54,13 +57,20 @@ class CensusAssistantModule extends AbstractModule
      *
      * @return ResponseInterface
      */
-    public function postCensusHeaderAction(ServerRequestInterface $request): ResponseInterface
+    public function postCensusInitializeAction(ServerRequestInterface $request): ResponseInterface
     {
+        $tree         = Validator::attributes($request)->tree();
+        $indi_xref    = Validator::parsedBody($request)->isXref()->string('xref', '');
+        $individual   = Registry::individualFactory()->make($indi_xref, $tree);
         $census_class = Validator::parsedBody($request)->string('census');
+        $census       = new $census_class();
 
-        $html = $this->censusTableHeader(new $census_class());
+        $data = json_encode([
+            'header' => $this->censusTableHeader($census),
+            'family' => $this->familyMembers($individual, $census),
+        ]);
 
-        return response($html);
+        return response($data);
     }
 
     /**
@@ -252,5 +262,46 @@ class CensusAssistantModule extends AbstractModule
         $html .= '<td class="wt-census-assistant-field"><a href="#" title="' . I18N::translate('Remove') . '">' . view('icons/delete') . '</a></td>';
 
         return '<tr class="wt-census-assistant-row">' . $html . '</tr>';
+    }
+
+    /**
+     * Produce a list of close family members
+     * for quick selection
+     *
+     * @param Individual|null $individual
+     * @param CensusInterface $census
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function familyMembers(Individual $individual, CensusInterface $census): array
+    {
+        $relationship_service = Registry::container()->get(RelationshipService::class);
+        $max_age     = (int) $individual->tree()->getPreference('MAX_ALIVE_AGE');
+        $censusYear  = (int) substr($census->censusDate(), -4);
+        $options     = [];
+        $individuals = new Collection();
+        $families    = $individual->childFamilies()
+            ->merge($individual->childStepFamilies())
+            ->merge($individual->spouseFamilies())
+            ->merge($individual->spouseStepFamilies());
+
+        $families->each(function ($family) use (&$individuals) {
+            $individuals = $individuals
+                ->merge($family->spouses())
+                ->merge($family->children());
+        });
+
+        $individuals->unique()->each(function (Individual $indi) use (&$options, $individual, $censusYear, $max_age, $relationship_service) {
+            $birth_year = (int) $indi->getBirthDate()->minimumDate()->format('%Y') ?: 0;
+            $death_year = (int) $indi->getDeathDate()->maximumDate()->format('%Y') ?: ($birth_year > 0 ? $birth_year + $max_age : PHP_INT_MAX);
+            $text = sprintf("%s (%s, %s)", strip_tags($indi->fullName()), $relationship_service->getCloseRelationshipName($individual, $indi), strip_tags($indi->lifespan()));
+            $options[]  = [
+                'value'        => $indi->xref(),
+                'text'         => $text,
+                'disabled'     => ($censusYear < $birth_year) || ($censusYear > $death_year),
+            ];
+        });
+
+        return $options;
     }
 }
