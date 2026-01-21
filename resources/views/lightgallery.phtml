@@ -1,0 +1,165 @@
+<?php
+
+declare(strict_types=1);
+
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\View;
+
+/**
+ * @var bool    $use_gallery
+ * @var bool    $filter_tabs
+ * @var int     $delay
+ * @var string  $transition
+ */
+?>
+
+<?php View::push('javascript') ?>
+<script>
+(function() {
+  "use strict";
+
+  /** @type {Boolean} useGallery */
+  const useGallery = <?= json_encode($use_gallery ?? false) ?>;
+
+  /** @type {Boolean} filterTabs */
+  const filterTabs = <?=json_encode($filter_tabs ?? false) ?>;
+
+  /** @type {Object} instance */
+  let instance = null;
+
+  document.addEventListener("click", e => {
+    if (e.target && e.target.parentNode.matches("a.gallery")) {
+      e.preventDefault();
+      const collection = buildImageCollection(e.target.parentNode);
+      openLightbox(collection, e.target.parentNode);
+      //fix for bug in rotate plugin
+    } else if (e.target && e.target.matches(".lg-img-rotate")) {
+      instance.closeGallery();
+    }
+  });
+
+  /**
+   *
+   * @param {HTMLElement} current
+   *
+   * @return {Array.<Object>}
+   */
+  const buildImageCollection = (current) => {
+    let items = [];
+    let collection = [];
+    if (useGallery) {
+      const tabs = document.getElementById("individual-tabs");
+      if (filterTabs && tabs) {
+        const active_tab = document.querySelector(".tab-pane.active");
+        items = items.concat(
+          Array.from(document.querySelectorAll("#individual-images .active .gallery")),
+          Array.from(active_tab.querySelectorAll(".gallery"))
+        );
+      } else {
+        items = Array.from(document.querySelectorAll(".gallery"));
+      }
+
+      // filter out hidden and duplicate items
+      // first hidden items...
+      items = items.filter((value, index, self) => {
+        const el = value.closest(".wt-relation-fact");
+        if (el && !el.classList.contains("show")) {
+          return false;
+        }
+        // ...then duplicates
+        return self.findIndex(t => (t.dataset.id === value.dataset.id)) === index;
+      });
+    } else {
+      items = [current];
+    }
+
+    items.forEach(element => {
+      const img = element.firstElementChild;
+      const data = element.dataset;
+      collection.push({
+        id: data.id,
+        thumb: img.src,
+        src: element.href,
+        subHtml: img.alt + data.note || '',
+        downloadUrl: JSON.parse(data.download || false) ? element.href.replace("inline", "attachment") : false,
+      });
+    });
+
+    return collection;
+  };
+
+  /**
+   *
+   * @param {Array.<Object>} collection
+   * @param {HTMLElement} current
+   *
+   * @return {void}
+   */
+  const openLightbox = (collection, current) => {
+
+    if (instance) {
+      instance.refresh(collection);
+    } else {
+      instance = window.lightGallery(current, {
+        actualSize: false,
+        allowMediaOverlap: true,
+        download: true, // download controlled by downloadUrl setting(url or false)
+        dynamic: true,
+        dynamicEl: collection,
+        fullScreen: true,
+        loop: true,
+        mode:  <?= json_encode($transition ?? "lg-slide") ?>,
+        plugins: [lgAutoplay, lgFullscreen, lgRotate, lgThumbnail, lgZoom],
+        rotate: true,
+        showZoomInOutIcons: true,
+        slideShowInterval: <?= json_encode($delay ?? 6000) ?>,
+        thumbnail: useGallery,
+        toggleThumb: true,
+        zoom: true,
+        // Translate the aria label strings
+        strings:  {
+          closeGallery: <?= json_encode(I18N::translate('Close')) ?>,
+          previousSlide: <?= json_encode(I18N::translate('Previous')) ?>,
+          nextSlide:  <?= json_encode(I18N::translate('Next')) ?>,
+          download:  <?= json_encode(I18N::translate('Download')) ?>,
+        },
+        autoplayPluginStrings: {
+          toggleAutoplay: <?= json_encode(I18N::translate('Toggle autoplay')) ?>,
+        },
+        fullscreenPluginStrings: {
+          toggleFullscreen: <?= json_encode(I18N::translate('Toggle fullscreen')) ?>,
+        },
+        rotatePluginStrings: {
+          flipVertical: <?= json_encode(I18N::translate('Flip vertical')) ?>,
+          flipHorizontal: <?= json_encode(I18N::translate('Flip horizontal')) ?>,
+          rotateLeft: <?= json_encode(I18N::translate('Rotate left')) ?>,
+          rotateRight: <?= json_encode(I18N::translate('Rotate right')) ?>,
+        },
+        thumbnailPluginStrings: {
+          toggleThumbnails: <?= json_encode(I18N::translate('Toggle thumbnails')) ?>,
+        },
+        zoomPluginStrings:{
+          zoomIn: <?= json_encode(I18N::translate('Zoom in')) ?>,
+          zoomOut: <?= json_encode(I18N::translate('Zoom out')) ?>,
+        },
+      });
+    }
+
+    instance.openGallery(collection.findIndex((el) => {
+      return el.id === current.dataset.id;
+    }));
+
+    current.addEventListener("lgAfterOpen", () => {
+      document.body.classList.add("overflow-hidden");
+      document.querySelectorAll(".lg-icon").forEach(element => {
+        element.title = element.getAttribute("aria-label");
+      });
+    }, false);
+
+    current.addEventListener("lgAfterClose", () => {
+      document.body.classList.remove("overflow-hidden");
+    }, false);
+  };
+})();
+</script>
+<?php View::endpush() ?>
