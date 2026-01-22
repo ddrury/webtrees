@@ -19,10 +19,10 @@ use Fisharebest\Webtrees\View;
   "use strict";
 
   /** @type {Boolean} useGallery */
-  const useGallery = <?= json_encode($use_gallery ?? false) ?>;
+  const useGallery = <?= json_encode($use_gallery ?? false) ?>; // @phpstan-ignore-line
 
   /** @type {Boolean} filterTabs */
-  const filterTabs = <?=json_encode($filter_tabs ?? false) ?>;
+  const filterTabs = <?=json_encode($filter_tabs ?? false) ?>; // @phpstan-ignore-line
 
   /** @type {Object} instance */
   let instance = null;
@@ -108,11 +108,11 @@ use Fisharebest\Webtrees\View;
         dynamicEl: collection,
         fullScreen: true,
         loop: true,
-        mode:  <?= json_encode($transition ?? "lg-slide") ?>,
+        mode:  <?= json_encode($transition ?? "lg-slide") ?>, // @phpstan-ignore-line
         plugins: [lgAutoplay, lgFullscreen, lgRotate, lgThumbnail, lgZoom],
         rotate: true,
         showZoomInOutIcons: true,
-        slideShowInterval: <?= json_encode($delay ?? 6000) ?>,
+        slideShowInterval: <?= json_encode($delay ?? 6000) ?>, // @phpstan-ignore-line
         thumbnail: useGallery,
         toggleThumb: true,
         zoom: true,
