@@ -117,7 +117,7 @@ class CensusAssistantModule extends AbstractModule
 
     /**
      * @param ServerRequestInterface $request
-     * @param Individual|null        $individual
+     * @param Individual             $individual
      * @param string                 $fact_id
      * @param string                 $newged
      * @param bool                   $keep_chan
