@@ -218,6 +218,7 @@ class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, 
         ];
 
         $sosa_points = [];
+        $lines       = [];
 
         foreach ($facts as $sosa => $fact) {
             $location = new PlaceLocation($fact->place()->gedcomName());
@@ -233,7 +234,6 @@ class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, 
             }
 
             if ($latitude !== null && $longitude !== null) {
-                $polyline           = null;
                 $sosa_points[$sosa] = [$latitude, $longitude];
                 $sosa_child         = intdiv($sosa, 2);
                 $generation         = (int) log($sosa, 2);
@@ -241,10 +241,7 @@ class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, 
                 $class              = 'wt-pedigree-map-gen-' . $generation % self::COUNT_CSS_COLORS;
 
                 if (array_key_exists($sosa_child, $sosa_points)) {
-                    // Would like to use a GeometryCollection to hold LineStrings
-                    // rather than generate polylines but the MarkerCluster library
-                    // doesn't seem to like them
-                    $polyline = [
+                    $lines[] = [
                         'points'  => [
                             $sosa_points[$sosa_child],
                             [$latitude, $longitude],
@@ -262,13 +259,12 @@ class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, 
                         'coordinates' => [$longitude, $latitude],
                     ],
                     'properties' => [
-                        'polyline'  => $polyline,
                         'iconcolor' => $color,
-                        'tooltip'   => null,
+                        'tooltip'   => $fact->place()->gedcomName(),
                         'summary'   => view('modules/pedigree-map/events', [
                             'class'        => $class,
                             'fact'         => $fact,
-                            'relationship' => $this->getSosaName($sosa),
+                            'relationship' => ucfirst($this->getSosaName($sosa)),
                             'sosa'         => $sosa,
                         ]),
                     ],
@@ -276,7 +272,10 @@ class PedigreeMapModule extends AbstractModule implements ModuleChartInterface, 
             }
         }
 
-        return $geojson;
+        return [
+            'geoJSON'   => $geojson,
+            'polylines' => $lines,
+        ];
     }
 
     /**
