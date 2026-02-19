@@ -1,6 +1,6 @@
 /**
  * webtrees: online genealogy
- * Copyright (C) 2023 webtrees development team
+ * Copyright (C) 2026 webtrees development team
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -42,8 +42,8 @@ import {
   faGenderless, faGripHorizontal, faGripLines, faHistory, faInfoCircle, faKeyboard, faLanguage, faLink,
   faList, faLock, faMagic, faMap, faMapMarkerAlt, faMars, faMedkit, faMinusSquare, faPaintBrush, faPause,
   faPencilAlt, faPlay, faPlus, faPlusSquare, faPuzzlePiece, faQuestionCircle, faRedo, faSearch,
-  faSearchLocation, faSearchMinus, faSearchPlus, faServer, faShareAlt, faSitemap, faSortAmountDown, faStar,
-  faStepForward, faStickyNote, faStop, faSyncAlt, faTags, faThList, faThumbtack, faTimes, faTransgender,
+  faSearchLocation, faSearchMinus, faSearchPlus, faServer, faShareAlt, faSitemap, faSortAmountDown, faSpinner,
+  faStar, faStepForward, faStickyNote, faStop, faSyncAlt, faTags, faThList, faThumbtack, faTimes, faTransgender,
   faTrashAlt, faTree, faUndo, faUniversity, faUnlink, faUpload, faUser, faUsers, faVenus, faWrench,
   // For the BeautifyMarker library
   faBabyCarriage, faBullseye, faHome, faIndustry, faInfinity, faStarOfDavid, faWater
@@ -64,8 +64,6 @@ TomSelect.define('remove_button', require('tom-select/dist/js/plugins/remove_but
 TomSelect.define('virtual_scroll', require('tom-select/dist/js/plugins/virtual_scroll.js'));
 
 window.TomSelect = TomSelect;
-
-import 'hideshowpassword';
 
 import 'moment';
 
@@ -92,8 +90,8 @@ library.add(
   faGenderless, faGripHorizontal, faGripLines, faHistory, faInfoCircle, faKeyboard, faLanguage, faLink,
   faList, faLock, faMagic, faMap, faMapMarkerAlt, faMars, faMedkit, faMinusSquare, faPaintBrush, faPause,
   faPencilAlt, faPlay, faPlus, faPlusSquare, faPuzzlePiece, faQuestionCircle, faRedo, faSearch,
-  faSearchLocation, faSearchMinus, faSearchPlus, faServer, faShareAlt, faSitemap, faSortAmountDown, faStar,
-  faStepForward, faStickyNote, faStop, faSyncAlt, faTags, faThList, faThumbtack, faTimes, faTransgender,
+  faSearchLocation, faSearchMinus, faSearchPlus, faServer, faShareAlt, faSitemap, faSortAmountDown, faSpinner,
+  faStar, faStepForward, faStickyNote, faStop, faSyncAlt, faTags, faThList, faThumbtack, faTimes, faTransgender,
   faTrashAlt, faTree, faUndo, faUniversity, faUnlink, faUpload, faUser, faUsers, faVenus, faWrench,
   // For the BeautifyMarker library
   faBabyCarriage, faBullseye, faHome, faIndustry, faInfinity, faStarOfDavid, faWater

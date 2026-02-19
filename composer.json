@@ -51,8 +51,8 @@
         "fisharebest/ext-calendar": "2.6.0",
         "fisharebest/localization": "1.17.0",
         "guzzlehttp/guzzle": "7.10.0",
-        "illuminate/database": "12.49.0",
-        "illuminate/support": "12.49.0",
+        "illuminate/database": "12.50.0",
+        "illuminate/support": "12.50.0",
         "intervention/image": "3.11.6",
         "league/commonmark": "2.8.0",
         "league/flysystem": "3.31.0",
@@ -86,8 +86,8 @@
         "phpstan/extension-installer": "1.4.3",
         "phpstan/phpstan": "2.1.38",
         "phpstan/phpstan-deprecation-rules": "2.0.3",
-        "phpstan/phpstan-phpunit": "2.0.12",
-        "phpunit/phpunit": "12.5.8",
+        "phpstan/phpstan-phpunit": "2.0.13",
+        "phpunit/phpunit": "12.5.10",
         "squizlabs/php_codesniffer": "4.0.1"
     },
     "suggest": {

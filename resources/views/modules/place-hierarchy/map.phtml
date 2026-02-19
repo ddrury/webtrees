@@ -11,9 +11,9 @@ use Fisharebest\Webtrees\View;
 
 ?>
 
-<div class='row gchart wt-place-hierarchy-wrapper wt-fullscreen-container'>
-    <div id='wt-map' class='col-sm-9 wt-ajax-load wt-map' dir='ltr'></div>
-    <ul class='col-sm-3 wt-map-sidebar wt-page-options-value list-unstyled px-md-1 mb-0'></ul>
+<div class="row gchart wt-place-hierarchy-wrapper wt-fullscreen-container">
+    <div id="wt-map" class="col-sm-9 wt-map" dir="ltr"><?= view('icons/spinner') ?></div>
+    <ul class="col-sm-3 wt-map-sidebar wt-page-options-value list-unstyled px-md-1 mb-0"></ul>
 </div>
 
 <?php View::push('javascript') ?>

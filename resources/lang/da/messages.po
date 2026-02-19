@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: webtrees\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-30 20:48+0000\n"
-"PO-Revision-Date: 2025-02-27 05:46+0000\n"
-"Last-Translator: Erik Bachmann <Erik@clicketyclick.dk>\n"
+"PO-Revision-Date: 2026-02-16 11:54+0000\n"
+"Last-Translator: stc4000 <sofie54@icloud.com>\n"
 "Language-Team: Danish <https://translate.webtrees.net/projects/webtrees/"
 "webtrees/da/>\n"
 "Language: da\n"
@@ -1282,7 +1282,7 @@ msgstr "Tilføj en datter"
 #: resources/views/edit/raw-gedcom-record.phtml:60
 #: resources/views/record-page-menu-facts.phtml:16
 msgid "Add a fact"
-msgstr "Tilføj fakta"
+msgstr "Tilføj et faktum"
 
 #: app/Http/RequestHandlers/AddParentToIndividualPage.php:77
 #: resources/views/family-page-grandparents.phtml:36
@@ -4631,7 +4631,9 @@ msgstr "Dato-interval"
 
 #: resources/views/help/date.phtml:100
 msgid "Date periods are used to indicate that a fact, such as an occupation, continued for a period of time."
-msgstr "Dato-intervaller bruges til at indikere at et fakta, som fx et erhverv, var gældende inden for et tidsrum."
+msgstr ""
+"Dato-intervaller bruges til at indikere at fakta, som fx erhverv, var "
+"gældende inden for et tidsrum."
 
 #: app/Gedcom.php:837 resources/views/help/date.phtml:69
 #: resources/views/modules/statistics-chart/custom.phtml:96
@@ -5975,79 +5977,79 @@ msgstr ""
 
 #: app/CustomTags/Gedcom7.php:98 app/Gedcom.php:658
 msgid "Fact"
-msgstr "Fakta"
+msgstr "Faktum"
 
 #: app/CustomTags/FamilyTreeMaker.php:57 app/CustomTags/FamilyTreeMaker.php:76
 #: app/CustomTags/FamilyTreeMaker.php:94 app/CustomTags/FamilyTreeMaker.php:121
 msgid "Fact 1"
-msgstr "Fakta 1"
+msgstr "Faktum 1"
 
 #: app/CustomTags/FamilyTreeMaker.php:58 app/CustomTags/FamilyTreeMaker.php:77
 #: app/CustomTags/FamilyTreeMaker.php:95 app/CustomTags/FamilyTreeMaker.php:122
 msgid "Fact 10"
-msgstr "Fakta 10"
+msgstr "Faktum 10"
 
 #: app/CustomTags/FamilyTreeMaker.php:59 app/CustomTags/FamilyTreeMaker.php:78
 #: app/CustomTags/FamilyTreeMaker.php:96 app/CustomTags/FamilyTreeMaker.php:123
 msgid "Fact 11"
-msgstr "Fakta 11"
+msgstr "Faktum 11"
 
 #: app/CustomTags/FamilyTreeMaker.php:60 app/CustomTags/FamilyTreeMaker.php:79
 #: app/CustomTags/FamilyTreeMaker.php:97 app/CustomTags/FamilyTreeMaker.php:124
 msgid "Fact 12"
-msgstr "Fakta 12"
+msgstr "Faktum 12"
 
 #: app/CustomTags/FamilyTreeMaker.php:61 app/CustomTags/FamilyTreeMaker.php:80
 #: app/CustomTags/FamilyTreeMaker.php:98 app/CustomTags/FamilyTreeMaker.php:125
 msgid "Fact 13"
-msgstr "Fakta 13"
+msgstr "Faktum 13"
 
 #: app/CustomTags/FamilyTreeMaker.php:62 app/CustomTags/FamilyTreeMaker.php:81
 #: app/CustomTags/FamilyTreeMaker.php:99 app/CustomTags/FamilyTreeMaker.php:126
 msgid "Fact 2"
-msgstr "Fakta 2"
+msgstr "Faktum 2"
 
 #: app/CustomTags/FamilyTreeMaker.php:63 app/CustomTags/FamilyTreeMaker.php:82
 #: app/CustomTags/FamilyTreeMaker.php:100
 #: app/CustomTags/FamilyTreeMaker.php:127
 msgid "Fact 3"
-msgstr "Fakta 3"
+msgstr "Faktum 3"
 
 #: app/CustomTags/FamilyTreeMaker.php:64 app/CustomTags/FamilyTreeMaker.php:83
 #: app/CustomTags/FamilyTreeMaker.php:101
 #: app/CustomTags/FamilyTreeMaker.php:128
 msgid "Fact 4"
-msgstr "Fakta 4"
+msgstr "Faktum 4"
 
 #: app/CustomTags/FamilyTreeMaker.php:65 app/CustomTags/FamilyTreeMaker.php:84
 #: app/CustomTags/FamilyTreeMaker.php:102
 #: app/CustomTags/FamilyTreeMaker.php:129
 msgid "Fact 5"
-msgstr "Fakta 5"
+msgstr "Faktum 5"
 
 #: app/CustomTags/FamilyTreeMaker.php:66 app/CustomTags/FamilyTreeMaker.php:85
 #: app/CustomTags/FamilyTreeMaker.php:103
 #: app/CustomTags/FamilyTreeMaker.php:130
 msgid "Fact 6"
-msgstr "Fakta 6"
+msgstr "Faktum 6"
 
 #: app/CustomTags/FamilyTreeMaker.php:67 app/CustomTags/FamilyTreeMaker.php:86
 #: app/CustomTags/FamilyTreeMaker.php:104
 #: app/CustomTags/FamilyTreeMaker.php:131
 msgid "Fact 7"
-msgstr "Fakta 7"
+msgstr "Faktum 7"
 
 #: app/CustomTags/FamilyTreeMaker.php:68 app/CustomTags/FamilyTreeMaker.php:87
 #: app/CustomTags/FamilyTreeMaker.php:105
 #: app/CustomTags/FamilyTreeMaker.php:132
 msgid "Fact 8"
-msgstr "Fakta 8"
+msgstr "Faktum 8"
 
 #: app/CustomTags/FamilyTreeMaker.php:69 app/CustomTags/FamilyTreeMaker.php:88
 #: app/CustomTags/FamilyTreeMaker.php:106
 #: app/CustomTags/FamilyTreeMaker.php:133
 msgid "Fact 9"
-msgstr "Fakta 9"
+msgstr "Faktum 9"
 
 #. I18N: A configuration setting
 #: resources/views/admin/trees-preferences.phtml:515
@@ -6056,7 +6058,7 @@ msgstr "Ikoner for fakta"
 
 #: resources/views/admin/trees-privacy.phtml:230
 msgid "Fact or event"
-msgstr "Fakta eller hændelse"
+msgstr "Faktum eller hændelse"
 
 #. I18N: Name of a module/tab on the individual page.
 #: app/Module/IndividualFactsTabModule.php:73
@@ -6169,7 +6171,7 @@ msgstr "Folketælling for familie"
 
 #: resources/views/admin/tags.phtml:976
 msgid "Family fact"
-msgstr "Familiefakta"
+msgstr "Familiefaktum"
 
 #: resources/views/admin/tags.phtml:1042
 msgid "Family facts and events"
@@ -11675,11 +11677,11 @@ msgstr "Quetzaltenango , Guatemala"
 
 #: resources/views/admin/trees-preferences.phtml:679
 msgid "Quick family facts"
-msgstr "Hurtig Familie fakta"
+msgstr "Hurtige familiefakta"
 
 #: resources/views/admin/trees-preferences.phtml:654
 msgid "Quick individual facts"
-msgstr "Hurtig person fakta"
+msgstr "Hurtige personfakta"
 
 #. I18N: The fifth day in the French republican calendar
 #: app/Date/FrenchDate.php:309
@@ -12250,7 +12252,9 @@ msgstr "Restriktion"
 
 #: resources/views/help/restriction.phtml:10
 msgid "Restrictions can be added to records and/or facts. They restrict who can view the data and who can edit it."
-msgstr "Restriktioner kan tilføjes til poster og/eller fakta. De begrænser hvem der kan se eller ændre data."
+msgstr ""
+"Restriktioner kan tilføjes til poster og/eller fakta. De begrænser, hvem der "
+"kan se eller ændre data."
 
 #: resources/views/modules/statistics-chart/custom.phtml:122
 msgid "Results"
@@ -20000,17 +20004,17 @@ msgstr "forælder"
 
 #: app/Services/RelationshipService.php:422
 msgid "partner"
-msgstr "samlever"
+msgstr "partner"
 
 #: app/Services/RelationshipService.php:399
 msgctxt "FEMALE"
 msgid "partner"
-msgstr "samlever"
+msgstr "partner"
 
 #: app/Services/RelationshipService.php:375
 msgctxt "MALE"
 msgid "partner"
-msgstr "samlever"
+msgstr "partner"
 
 #: app/SurnameTradition/PaternalSurnameTradition.php:38
 msgctxt "Surname tradition"
