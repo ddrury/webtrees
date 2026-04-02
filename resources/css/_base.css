@@ -28,6 +28,7 @@
 @import "_sortable.css";
 @import "_tab-album.css";
 @import "_tab-relatives.css";
+@import "_typeaheadjs.css";
 
 /* Some icons need to be reversed on right-to-left pages */
 /* rtl:ignore */
@@ -58,7 +59,8 @@ a {
     text-decoration: none;
 }
 
-a:hover {
+a:hover,
+a:focus {
     text-decoration: underline;
 }
 
@@ -86,7 +88,7 @@ a:hover {
 /* Accordions */
 .accordion-button,
 .accordion-button:not(.collapsed) {
-    background-color: rgba(0,0,0,.03);
+    background-color: var(--bs-tertiary-bg);
     color: currentcolor;
 }
 
@@ -109,7 +111,6 @@ a:hover, .btn-link:hover, .nav-link:hover {
 .dropdown-menu {
     max-height: 90vh;
     overflow-x: hidden;
-    scrollbar-gutter: stable;
 }
 
 /* User-generated text */
@@ -124,7 +125,7 @@ a:hover, .btn-link:hover, .nav-link:hover {
 .wt-nested-edit-fields {
     padding-left: 1rem;
     margin-left: 1rem;
-    border-left: solid 4px grey;
+    border-left: solid 4px var(--bs-border-color);
 }
 
 .wt-text-overflow-elipsis {
@@ -158,7 +159,7 @@ a:hover, .btn-link:hover, .nav-link:hover {
 }
 
 .wt-icon-spinner {
-    color: lightgrey;
+    color: var(--bs-secondary-color);
     opacity: 0;
     animation: spinner-fade-in 0.5s ease-in forwards;
     animation-delay: 1s;

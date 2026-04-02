@@ -14,44 +14,34 @@
  */
 
 /*
- * Timeline chart
- *
- * wt-chart, wt-chart-timeline
+ * Bootstrap 5 styling for typeahead.js
  */
-#timeline_chart {
-    position: relative;
-    top: 0;
-    left: 0;
+
+.twitter-typeahead {
+    width: 100%;
 }
 
-.person0 {
-    background-color: #ffb3ba;
+.twitter-typeahead .tt-hint {
+    background-color: var(--bs-body-bg) !important;
+    color: var(--bs-tertiary-color);
 }
 
-.person1 {
-    background-color: #ffd8ba;
+.twitter-typeahead .tt-menu {
+    background: var(--bs-body-bg);
+    border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    box-shadow: var(--bs-box-shadow);
+    margin-top: 0.25rem;
+    padding: 0.25rem 0;
+    width: 100%;
 }
 
-.person2 {
-    background-color: #fff3ba;
+.twitter-typeahead .tt-suggestion {
+    padding: 0.25rem 0.75rem;
+    cursor: pointer;
 }
 
-.person3 {
-    background-color: #d4ffba;
-}
-
-.person4 {
-    background-color: #baffc9;
-}
-
-.person5 {
-    background-color: #bae1ff;
-}
-
-.person6 {
-    background-color: #e2baff;
-}
-
-.person7 {
-    background-color: #ffbaf3;
+.twitter-typeahead .tt-suggestion:hover,
+.twitter-typeahead .tt-suggestion.tt-cursor {
+    background-color: var(--bs-tertiary-bg);
 }

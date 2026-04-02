@@ -512,4 +512,9 @@ trait ModuleThemeTrait
     {
         return [];
     }
+
+    public function bootstrapColorScheme(): string
+    {
+        return 'light';
+    }
 }
