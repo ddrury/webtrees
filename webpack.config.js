@@ -99,6 +99,7 @@ module.exports = (env, argv) => ({
         patterns: [
           { from: 'node_modules/leaflet/dist/images/*', to: 'css/images/[name][ext]' },
           { from: 'node_modules/dejavu-fonts-ttf/ttf/DejaVuSans.ttf', to: path.resolve(__dirname, 'resources/fonts/DejaVuSans.ttf') },
+          { from: 'node_modules/lightgallery/fonts/*', to: 'css/fonts/[name][ext]'},
         ],
       }),
       {
